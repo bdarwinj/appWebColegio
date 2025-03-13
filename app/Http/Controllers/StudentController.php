@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use App\Models\Course; // Asegúrate de importar el modelo Course
+use App\Models\Course;
 
 class StudentController extends Controller
 {
     public function index()
     {
         $students = Student::with('course')->get();
-        return view('students.index', compact('students'));
+        $courses = Course::all(); // Se envía la lista de cursos para el modal
+        return view('students.index', compact('students', 'courses'));
     }
     
     public function create()
