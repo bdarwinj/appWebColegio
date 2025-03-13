@@ -1,27 +1,31 @@
-<!-- resources/views/auth/login.blade.php -->
-@extends('layouts.app')
+@extends('layouts.auth')
+@section('title', 'Iniciar Sesión - Sistema Colegio')
 
 @section('content')
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <h3 class="text-center">Iniciar Sesión</h3>
-        <form action="{{ route('doLogin') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="username">Usuario</label>
-                <input type="text" class="form-control" id="username" name="username" required autofocus>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Iniciar Sesión</h3>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+                <form action="{{ route('doLogin') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                </form>
             </div>
-            <div class="form-group mt-2">
-                <label for="password">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            @if ($errors->any())
-                <div class="alert alert-danger mt-2">
-                    {{ $errors->first() }}
-                </div>
-            @endif
-            <button type="submit" class="btn btn-primary mt-3 w-100">Iniciar Sesión</button>
-        </form>
+        </div>
     </div>
 </div>
 @endsection
