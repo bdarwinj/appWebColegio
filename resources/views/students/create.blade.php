@@ -26,7 +26,7 @@
                 <option value="">-- Seleccionar Curso --</option>
                 @foreach($courses as $course)
                     <option value="{{ $course->id }}">
-                        {{ $course->name }} 
+                        {{ $course->name }}
                         @if($course->seccion) - {{ $course->seccion }} @endif 
                         @if($course->jornada) - {{ $course->jornada }} @endif
                     </option>

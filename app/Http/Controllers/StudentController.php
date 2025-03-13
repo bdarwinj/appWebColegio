@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Course; // Asegúrate de importar el modelo Course
 
 class StudentController extends Controller
 {
@@ -15,7 +16,9 @@ class StudentController extends Controller
     
     public function create()
     {
-        return view('students.create');
+        // Obtener la lista de cursos para pasarla a la vista
+        $courses = Course::all();
+        return view('students.create', compact('courses'));
     }
     
     public function store(Request $request)

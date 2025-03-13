@@ -8,6 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CourseFeeController;
 
 Route::get('/', function(){
     return redirect()->route('login');
@@ -24,6 +25,10 @@ Route::middleware('auth')->group(function(){
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    
+    // Course Fees (Tarifas de Cursos)
+    Route::get('/course-fees/config', [CourseFeeController::class, 'config'])->name('course_fees.config');
+    Route::post('/course-fees', [CourseFeeController::class, 'store'])->name('course_fees.store');
     
     // Students
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
