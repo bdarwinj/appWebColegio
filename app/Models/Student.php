@@ -24,4 +24,19 @@ class Student extends Model
     {
         return $this->hasMany(Payment::class);
     }
+    // Accessor para obtener el nombre completo del curso
+    public function getCourseNameAttribute()
+    {
+        if ($this->course) {
+            $parts = [$this->course->name];
+            if (!empty($this->course->seccion)) {
+                $parts[] = $this->course->seccion;
+            }
+            if (!empty($this->course->jornada)) {
+                $parts[] = $this->course->jornada;
+            }
+            return implode(' - ', $parts);
+        }
+        return "N/A";
+    }
 }

@@ -11,7 +11,7 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::with('course')->get();
-        $courses = Course::all(); // Se envía la lista de cursos para el modal
+        $courses = Course::all(); // Para el modal de agregar
         return view('students.index', compact('students', 'courses'));
     }
     
@@ -43,4 +43,35 @@ class StudentController extends Controller
         $student = Student::with('course')->findOrFail($id);
         return view('students.details', compact('student'));
     }
+    
+    public function details($id)
+    {
+        $student = Student::with('course')->findOrFail($id);
+        // Suponiendo que tengas una relación payments en el modelo Student
+        $payments = $student->payments()->orderBy('payment_date', 'desc')->get();
+        return view('students.details_modal', compact('student', 'payments'));
+    }
+    
+    public function edit($id)
+    {
+        $student = Student::findOrFail($id);
+        $courses = Course::all();
+        return view('students.edit', compact('student', 'courses'));
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $student = Student::findOrFail($id);
+        $request->validate([
+            'nombre' => 'required|string',
+            'apellido' => 'required|string',
+            'course_id' => 'nullable|numeric',
+            'representante' => 'nullable|string',
+            'telefono' => 'nullable|string',
+            'email' => 'nullable|email'
+        ]);
+        $student->update($request->all());
+        return redirect()->route('students.index')->with('success', 'Estudiante actualizado correctamente.');
+    }
 }
+// Compare this snippet from app/Http/Controllers/EnrollmentController.php:

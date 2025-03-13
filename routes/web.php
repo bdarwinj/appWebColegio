@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
     
-    // Course Fees (Tarifas de Cursos)
+    // Course Fees
     Route::get('/course-fees/config', [CourseFeeController::class, 'config'])->name('course_fees.config');
     Route::post('/course-fees', [CourseFeeController::class, 'store'])->name('course_fees.store');
     
@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
     Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
+    Route::get('/students/{id}/details', [StudentController::class, 'details'])->name('students.details');
+    Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
+    Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
     
     // Enrollments
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
