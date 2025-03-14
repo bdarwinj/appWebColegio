@@ -32,7 +32,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
             <li><a class="dropdown-item" href="{{ route('courses.index') }}">Listado de Cursos</a></li>
-            <li><a class="dropdown-item" href="{{ route('courses.create') }}">Agregar Curso</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addCourseModal">Agregar Curso</a></li>
           </ul>
         </li>
         <!-- Estudiantes -->
@@ -42,7 +42,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
             <li><a class="dropdown-item" href="{{ route('students.index') }}">Listado de Estudiantes</a></li>
-            <li><a class="dropdown-item" href="{{ route('students.create') }}">Registrar Estudiante</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addStudentModal">Registrar Estudiante</a></li>
           </ul>
         </li>
         <!-- Inscripciones -->
@@ -69,9 +69,9 @@
             <li><a class="dropdown-item" href="{{ route('users.create') }}">Crear Usuario</a></li>
           </ul>
         </li>
-        <!-- Tarifas (Mensualidades) -->
+        <!-- Configuración -->
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('course_fees.config') }}">Tarifas</a>
+          <a class="nav-link" href="{{ route('config.edit') }}">Configuración Colegio</a>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">

@@ -9,6 +9,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseFeeController;
+use App\Http\Controllers\ConfigController;
 
 Route::get('/', function(){
     return redirect()->route('login');
@@ -52,4 +53,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+    // Configuración del Colegio
+    Route::get('/config/edit', [ConfigController::class, 'edit'])->name('config.edit');
+    Route::put('/config', [ConfigController::class, 'update'])->name('config.update');
 });
