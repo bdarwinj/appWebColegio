@@ -15,6 +15,7 @@
                 <th>Fecha de Pago</th>
                 <th>Descripción</th>
                 <th>Periodo</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +26,11 @@
                 <td>{{ $payment->payment_date }}</td>
                 <td>{{ $payment->description }}</td>
                 <td>{{ $payment->period }}</td>
+                <td>
+                    <a href="{{ route('payments.receipt', $payment->id) }}" class="btn btn-sm btn-primary">
+                        Descargar PDF
+                    </a>
+                </td>
             </tr>
             @endforeach
         </tbody>

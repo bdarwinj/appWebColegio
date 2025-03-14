@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/history/{student_id}', [PaymentController::class, 'history'])->name('payments.history');
     Route::get('/payments/receipt/{id}', [PaymentController::class, 'receipt'])->name('payments.receipt');
+    Route::get('/payments/receipt/{id}', [PaymentController::class, 'receipt'])->name('payments.receipt');
 
     
     // Users
