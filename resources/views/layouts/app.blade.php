@@ -5,23 +5,35 @@
     <title>@yield('title', 'Sistema Colegio')</title>
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('storage/' . $logoPath) }}">
     <style>
         body {
             background: #f8f9fa;
+        }
+        .navbar-brand img {
+            max-height: 40px;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ route('dashboard') }}">Sistema Colegio</a>
+    <a class="navbar-brand" href="{{ route('dashboard') }}">
+        @if($logoPath)
+            <img src="{{ asset('storage/' . $logoPath) }}" alt="Logo del Colegio">
+
+
+        @endif
+        {{ $schoolName }}
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <!-- Dashboard -->
+        <!-- Menú de navegación con las opciones -->
         <li class="nav-item">
           <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
         </li>
@@ -69,7 +81,7 @@
             <li><a class="dropdown-item" href="{{ route('users.create') }}">Crear Usuario</a></li>
           </ul>
         </li>
-        <!-- Configuración -->
+        <!-- Configuración Colegio -->
         <li class="nav-item">
           <a class="nav-link" href="{{ route('config.edit') }}">Configuración Colegio</a>
         </li>
