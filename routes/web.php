@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/history/{student_id}', [PaymentController::class, 'history'])->name('payments.history');
+    Route::get('/payments/receipt/{id}', [PaymentController::class, 'receipt'])->name('payments.receipt');
+
     
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
