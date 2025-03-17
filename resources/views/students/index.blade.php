@@ -1,17 +1,39 @@
-{{-- resources/views/students/index.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Listado de Estudiantes')
 
 @section('content')
+<style>
+    .table thead th {
+        background-color: #003366;
+        color: white;
+    }
+    .table tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+    .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .btn-action {
+        margin-right: 5px;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+</style>
+
 <div class="container">
-    <h2>Listado de Estudiantes</h2>
+    <h2 class="text-center mb-4" style="color: #003366;">Listado de Estudiantes</h2>
     <!-- Botón para abrir modal de agregar estudiante -->
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-        Agregar Nuevo Estudiante
+        <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
     </button>
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success d-flex align-items-center">
+            <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+        </div>
     @endif
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
@@ -40,12 +62,12 @@
                 <td>{{ $student->active ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     <!-- Botón para ver detalles -->
-                    <button type="button" class="btn btn-sm btn-info btn-view-details" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#viewStudentModal">
-                        Ver Detalles
+                    <button type="button" class="btn btn-sm btn-info btn-view-details btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#viewStudentModal">
+                        <i class="bi bi-eye"></i> Ver
                     </button>
                     <!-- Botón para editar -->
-                    <button type="button" class="btn btn-sm btn-warning btn-edit-student" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#editStudentModal">
-                        Editar
+                    <button type="button" class="btn btn-sm btn-warning btn-edit-student btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                        <i class="bi bi-pencil"></i> Editar
                     </button>
                 </td>
             </tr>
@@ -65,7 +87,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-            <!-- Incluye todos los campos necesarios -->
             <div class="mb-3">
                 <label for="identificacion" class="form-label">Número de Identificación</label>
                 <input type="text" class="form-control" id="identificacion" name="identificacion" required>
@@ -122,7 +143,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body" id="viewStudentContent">
-        <!-- Contenido se cargará dinámicamente con AJAX -->
         <div class="text-center">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Cargando...</span>
@@ -140,7 +160,6 @@
 <div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <!-- Contenido se cargará dinámicamente con AJAX -->
       <div class="modal-header">
         <h5 class="modal-title" id="editStudentModalLabel">Editar Estudiante</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
@@ -161,7 +180,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Cargar detalles del estudiante al hacer clic en "Ver Detalles"
         document.querySelectorAll('.btn-view-details').forEach(function(button) {
             button.addEventListener('click', function(){
                 var studentId = this.getAttribute('data-student-id');
@@ -169,16 +187,11 @@
                 modalBody.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>';
                 fetch('/students/' + studentId + '/details')
                     .then(response => response.text())
-                    .then(html => {
-                        modalBody.innerHTML = html;
-                    })
-                    .catch(error => {
-                        modalBody.innerHTML = '<p class="text-danger">Error al cargar los detalles.</p>';
-                    });
+                    .then(html => modalBody.innerHTML = html)
+                    .catch(error => modalBody.innerHTML = '<p class="text-danger">Error al cargar los detalles.</p>');
             });
         });
 
-        // Cargar formulario de edición al hacer clic en "Editar"
         document.querySelectorAll('.btn-edit-student').forEach(function(button) {
             button.addEventListener('click', function(){
                 var studentId = this.getAttribute('data-student-id');
@@ -186,12 +199,8 @@
                 modalBody.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>';
                 fetch('/students/' + studentId + '/edit')
                     .then(response => response.text())
-                    .then(html => {
-                        modalBody.innerHTML = html;
-                    })
-                    .catch(error => {
-                        modalBody.innerHTML = '<p class="text-danger">Error al cargar el formulario.</p>';
-                    });
+                    .then(html => modalBody.innerHTML = html)
+                    .catch(error => modalBody.innerHTML = '<p class="text-danger">Error al cargar el formulario.</p>');
             });
         });
     });
