@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseFeeController;
 use App\Http\Controllers\ConfigController;
+use App\Http\Controllers\ImportStudentController;
 
 Route::get('/', function(){
     return redirect()->route('login');
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/students/{id}/details', [StudentController::class, 'details'])->name('students.details');
     Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
+    // Import Students
+    Route::get('/students/import', [ImportStudentController::class, 'showImportForm'])->name('students.import.form');
+    Route::post('/students/import', [ImportStudentController::class, 'import'])->name('students.import');
     
     // Enrollments
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');

@@ -26,10 +26,20 @@
 
 <div class="container">
     <h2 class="text-center mb-4" style="color: #003366;">Listado de Estudiantes</h2>
-    <!-- Botón para abrir modal de agregar estudiante -->
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-        <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
-    </button>
+    <div class="mb-3 d-flex justify-content-between">
+        <!-- Botón para abrir modal de agregar estudiante -->
+        <div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
+            </button>
+        </div>
+        <!-- Botón para abrir modal de importar estudiantes -->
+        <div>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importStudentModal">
+                <i class="bi bi-upload"></i> Importar Estudiantes
+            </button>
+        </div>
+    </div>
     @if(session('success'))
         <div class="alert alert-success d-flex align-items-center">
             <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
@@ -134,6 +144,31 @@
   </div>
 </div>
 
+<!-- Modal: Importar Estudiantes -->
+<div class="modal fade" id="importStudentModal" tabindex="-1" aria-labelledby="importStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="importStudentModalLabel">Importar Estudiantes desde Excel</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="excel_file" class="form-label">Seleccionar Archivo Excel</label>
+            <input type="file" class="form-control" id="excel_file" name="excel_file" accept=".xls,.xlsx" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Importar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Ver Detalles del Estudiante -->
 <div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -180,6 +215,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Cargar detalles del estudiante al hacer clic en "Ver Detalles"
         document.querySelectorAll('.btn-view-details').forEach(function(button) {
             button.addEventListener('click', function(){
                 var studentId = this.getAttribute('data-student-id');
@@ -192,6 +228,7 @@
             });
         });
 
+        // Cargar formulario de edición al hacer clic en "Editar"
         document.querySelectorAll('.btn-edit-student').forEach(function(button) {
             button.addEventListener('click', function(){
                 var studentId = this.getAttribute('data-student-id');
