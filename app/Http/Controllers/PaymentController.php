@@ -8,12 +8,12 @@ use App\Models\Student;
 use App\Models\Enrollment;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
     public function create()
     {
-        // Obtener la lista de estudiantes para el select
         $students = Student::all();
         return view('payments.create', compact('students'));
     }
@@ -32,13 +32,12 @@ class PaymentController extends Controller
         $data['payment_date'] = Carbon::now();
         $payment = Payment::create($data);
         
-        // Generar número de recibo similar a la versión Python: YYYYMMDD-000X
+        // Generar número de recibo: YYYYMMDD-000X
         $datePart = Carbon::now()->format('Ymd');
         $receiptNumber = $datePart . '-' . str_pad($payment->id, 4, '0', STR_PAD_LEFT);
         $payment->receipt_number = $receiptNumber;
         $payment->save();
         
-        // Almacenar en sesión los datos del recibo para mostrar el modal
         session()->flash('receipt', [
             'id'             => $payment->id,
             'receipt_number' => $receiptNumber,
@@ -55,15 +54,38 @@ class PaymentController extends Controller
     {
         $payment = Payment::findOrFail($id);
         $student = $payment->student;
+        $schoolName = DB::table('config')->where('key', 'SCHOOL_NAME')->value('value') ?? 'Colegio Ejemplo';
+        $logoPath = DB::table('config')->where('key', 'LOGO_PATH')->value('value') ?? 'assets/logo.png';
+        
         $data = [
-            'payment' => $payment,
-            'student' => $student,
-            // Opcional: también se puede pasar $schoolName y $logoPath desde la configuración
-            'schoolName' => session('schoolName', 'Colegio Ejemplo'),
-            'logoPath' => session('logoPath', 'assets/logo.png'),
+            'payment'   => $payment,
+            'student'   => $student,
+            'schoolName'=> $schoolName,
+            'logoPath'  => $logoPath,
         ];
-        $pdf = Pdf::loadView('payments.receipt', $data);
+        $pdf = PDF::loadView('payments.receipt', $data);
         return $pdf->download('recibo_' . $payment->receipt_number . '.pdf');
+    }
+    
+    // Nuevo método para historial global con búsqueda
+    public function historyAll(Request $request)
+    {
+        $query = Payment::query()->with('student');
+        
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            // Filtrar pagos a través de la relación con el estudiante
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('identificacion', 'like', "%$search%")
+                  ->orWhere('nombre', 'like', "%$search%")
+                  ->orWhere('apellido', 'like', "%$search%");
+            });
+        }
+        
+        // Puedes usar paginate() o get() según prefieras
+        $payments = $query->orderBy('payment_date', 'desc')->paginate(15);
+        
+        return view('payments.history_all', compact('payments'));
     }
     
     public function history($student_id)

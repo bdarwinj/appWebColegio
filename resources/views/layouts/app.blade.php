@@ -84,7 +84,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="paymentsDropdown">
             <li><a class="dropdown-item" href="{{ route('payments.create') }}">Registrar Pago</a></li>
-            <li><a class="dropdown-item" href="{{ route('payments.history', 1) }}">Historial de Pagos</a></li>
+            <li><a class="dropdown-item" href="{{ route('payments.history.all') }}">Historial de Pagos</a></li>
           </ul>
         </li>
         <!-- Usuarios -->
