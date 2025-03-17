@@ -10,8 +10,10 @@ class StudentController extends Controller
 {
     public function index()
     {
+        // Cargamos estudiantes con la relación course para el accessor course_name
         $students = Student::with('course')->get();
-        $courses = Course::all(); // Para el modal de agregar
+        // También obtenemos los cursos (para los modales, etc.)
+        $courses = Course::all();
         return view('students.index', compact('students', 'courses'));
     }
     

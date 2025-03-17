@@ -22,6 +22,17 @@
         background-color: #d4edda;
         color: #155724;
     }
+    .dt-button {
+        background-color: #0066CC;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin-right: 5px;
+    }
+    .dt-button:hover {
+        background-color: #004080;
+    }
 </style>
 
 <div class="container">
@@ -45,7 +56,7 @@
             <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
         </div>
     @endif
-    <table class="table table-bordered table-striped">
+    <table id="studentsTable" class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
@@ -213,8 +224,21 @@
   </div>
 </div>
 
+@section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function(){
+        // Inicializar DataTables en la tabla de estudiantes
+        $('#studentsTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+            },
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ],
+            "dom": 'Bfrtip', // Habilitar botones
+            "buttons": [
+                'copy', 'excel', 'pdf', 'print' // Botones para copiar, exportar a Excel, PDF y imprimir
+            ]
+        });
+
         // Cargar detalles del estudiante al hacer clic en "Ver Detalles"
         document.querySelectorAll('.btn-view-details').forEach(function(button) {
             button.addEventListener('click', function(){

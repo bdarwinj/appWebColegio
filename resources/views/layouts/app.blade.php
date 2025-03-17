@@ -6,8 +6,13 @@
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="{{ asset('storage/' . $logoPath) }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- DataTables CSS CDN -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"/>
+    <!-- Favicon -->
+    @if($logoPath)
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $logoPath) }}">
+    @endif
     <style>
         body {
             background: #f8f9fa;
@@ -16,6 +21,7 @@
         .navbar-brand img {
             max-height: 40px;
             margin-right: 10px;
+            border-radius: 50%; /* Bordes redondeados para el logo */
         }
         .navbar-dark .navbar-nav .nav-link {
             color: #fff;
@@ -116,7 +122,12 @@
 <div class="container mt-4">
     @yield('content')
 </div>
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap Bundle with Popper CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables JS CDN -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+@yield('scripts')
 </body>
 </html>
