@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Course;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
@@ -26,7 +26,20 @@ class CourseController extends Controller
             'jornada' => 'nullable|string'
         ]);
         
-        Course::create($request->only('name', 'seccion', 'jornada'));
+        $data = $request->only('name', 'seccion', 'jornada');
+        $data['jornada'] = $data['jornada'] ?? "";
+        Course::create($data);
         return redirect()->route('courses.index')->with('success', 'Curso agregado correctamente.');
+    }
+    
+    /**
+     * Retorna los cursos que coinciden con el grado especificado.
+     *
+     * @param string $grade
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getCoursesByGrade($grade)
+    {
+        return Course::where('name', $grade)->where('active', 1)->get();
     }
 }
