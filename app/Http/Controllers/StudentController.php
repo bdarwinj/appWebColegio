@@ -53,7 +53,12 @@ class StudentController extends Controller
         $payments = $student->payments()->orderBy('payment_date', 'desc')->get();
         return view('students.details_modal', compact('student', 'payments'));
     }
-    
+    // Método para retornar el historial de inscripciones de un estudiante (para modal)
+    public function enrollmentHistory($id)
+    {
+        $student = Student::with(['enrollments.course'])->findOrFail($id);
+        return view('students.enrollment_history_modal', compact('student'));
+    }
     public function edit($id)
     {
         $student = Student::findOrFail($id);

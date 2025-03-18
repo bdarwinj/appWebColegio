@@ -22,17 +22,6 @@
         background-color: #d4edda;
         color: #155724;
     }
-    .dt-button {
-        background-color: #0066CC;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        margin-right: 5px;
-    }
-    .dt-button:hover {
-        background-color: #004080;
-    }
 </style>
 
 <div class="container">
@@ -72,7 +61,7 @@
         </thead>
         <tbody>
             @foreach($students as $student)
-            <tr>
+            <tr data-student-id="{{ $student->id }}">
                 <td>{{ $student->id }}</td>
                 <td>{{ $student->identificacion }}</td>
                 <td>{{ $student->nombre }}</td>
@@ -108,6 +97,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
+            <!-- Campos de registro (igual que antes) -->
             <div class="mb-3">
                 <label for="identificacion" class="form-label">Número de Identificación</label>
                 <input type="text" class="form-control" id="identificacion" name="identificacion" required>
@@ -180,7 +170,29 @@
   </div>
 </div>
 
-<!-- Modal: Ver Detalles del Estudiante -->
+<!-- Modal: Ver Detalles del Estudiante (para mostrar historial de inscripciones) -->
+<div class="modal fade" id="enrollmentHistoryModal" tabindex="-1" aria-labelledby="enrollmentHistoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="enrollmentHistoryModalLabel">Historial de Inscripciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="enrollmentHistoryContent">
+        <div class="text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ver Detalles del Estudiante (para ver otros detalles) -->
 <div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -190,9 +202,9 @@
       </div>
       <div class="modal-body" id="viewStudentContent">
         <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Cargando...</span>
-            </div>
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -212,9 +224,9 @@
       </div>
       <div class="modal-body" id="editStudentContent">
         <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Cargando...</span>
-            </div>
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -232,38 +244,58 @@
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
             },
-            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ],
-            "dom": 'Bfrtip', // Habilitar botones
-            "buttons": [
-                'copy', 'excel', 'pdf', 'print' // Botones para copiar, exportar a Excel, PDF y imprimir
-            ]
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
         });
-
+        
+        // Evento de doble click en la fila para abrir el modal de historial de inscripciones
+        $('#studentsTable tbody').on('dblclick', 'tr', function() {
+            var studentId = $(this).data('student-id');
+            var modalBody = $('#enrollmentHistoryContent');
+            modalBody.html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>');
+            fetch('/students/' + studentId + '/enrollments')
+                .then(response => response.text())
+                .then(html => modalBody.html(html))
+                .catch(error => modalBody.html('<p class="text-danger">Error al cargar el historial.</p>'));
+            $('#enrollmentHistoryModal').modal('show');
+        });
+        
         // Cargar detalles del estudiante al hacer clic en "Ver Detalles"
-        document.querySelectorAll('.btn-view-details').forEach(function(button) {
-            button.addEventListener('click', function(){
-                var studentId = this.getAttribute('data-student-id');
-                var modalBody = document.getElementById('viewStudentContent');
-                modalBody.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>';
-                fetch('/students/' + studentId + '/details')
-                    .then(response => response.text())
-                    .then(html => modalBody.innerHTML = html)
-                    .catch(error => modalBody.innerHTML = '<p class="text-danger">Error al cargar los detalles.</p>');
-            });
+        $('.btn-view-details').on('click', function(){
+            var studentId = $(this).data('student-id');
+            var modalBody = $('#viewStudentContent');
+            modalBody.html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>');
+            fetch('/students/' + studentId + '/details')
+                .then(response => response.text())
+                .then(html => modalBody.html(html))
+                .catch(error => modalBody.html('<p class="text-danger">Error al cargar los detalles.</p>'));
         });
 
         // Cargar formulario de edición al hacer clic en "Editar"
-        document.querySelectorAll('.btn-edit-student').forEach(function(button) {
-            button.addEventListener('click', function(){
-                var studentId = this.getAttribute('data-student-id');
-                var modalBody = document.getElementById('editStudentContent');
-                modalBody.innerHTML = '<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>';
-                fetch('/students/' + studentId + '/edit')
-                    .then(response => response.text())
-                    .then(html => modalBody.innerHTML = html)
-                    .catch(error => modalBody.innerHTML = '<p class="text-danger">Error al cargar el formulario.</p>');
-            });
+        $('.btn-edit-student').on('click', function(){
+            var studentId = $(this).data('student-id');
+            var modalBody = $('#editStudentContent');
+            modalBody.html('<div class="text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div></div>');
+            fetch('/students/' + studentId + '/edit')
+                .then(response => response.text())
+                .then(html => modalBody.html(html))
+                .catch(error => modalBody.html('<p class="text-danger">Error al cargar el formulario.</p>'));
         });
     });
 </script>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function(){
+        // Inicializar DataTables en la tabla de estudiantes
+        $('#studentsTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+            },
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
+        });
+    });
+</script>
+@endsection
+
 @endsection

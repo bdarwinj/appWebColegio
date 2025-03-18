@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function(){
     // Enrollments
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::post('/enrollments/{id}/promote', [EnrollmentController::class, 'promote'])->name('enrollments.promote');
+    Route::get('/students/{id}/enrollments', [StudentController::class, 'enrollmentHistory'])->name('students.enrollmentHistory');
+
     
     // Payments
     Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
