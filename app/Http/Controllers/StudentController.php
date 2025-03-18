@@ -83,4 +83,24 @@ class StudentController extends Controller
         $student->update($data);
         return redirect()->route('students.index')->with('success', 'Estudiante actualizado correctamente.');
     }
+
+    public function search(Request $request)
+    {
+        $term = $request->get('q');
+        $students = Student::where('identificacion', 'like', "%{$term}%")
+            ->orWhere('nombre', 'like', "%{$term}%")
+            ->orWhere('apellido', 'like', "%{$term}%")
+            ->limit(10)
+            ->get();
+
+        $formatted = [];
+        foreach ($students as $student) {
+            $formatted[] = [
+                'id' => $student->id,
+                'text' => $student->identificacion . ' - ' . $student->nombre . ' ' . $student->apellido,
+            ];
+        }
+
+        return response()->json($formatted);
+    }
 }
