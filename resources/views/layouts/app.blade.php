@@ -76,7 +76,9 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="studentsDropdown">
             <li><a class="dropdown-item" href="{{ route('students.index') }}">Listado de Estudiantes</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addStudentModal">Registrar Estudiante</a></li>
+            @if(Auth::user()->role === 'admin')
+            <li><a class="dropdown-item" href="{{ route('students.create') }}">Registrar Estudiante</a></li>
+            @endif
           </ul>
         </li>
         <!-- Inscripciones -->
