@@ -17,6 +17,7 @@
         body {
             background: #f8f9fa;
             font-family: 'Arial', sans-serif;
+            padding-top: 70px; /* Ajusta el valor según la altura de tu navbar */
         }
         .navbar-brand img {
             max-height: 40px;
@@ -41,7 +42,7 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ route('dashboard') }}">
         @if($logoPath)
