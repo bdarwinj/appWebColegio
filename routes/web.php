@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/students/{id}/details', [StudentController::class, 'details'])->name('students.details');
     Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
+    Route::get('/students/data', [StudentController::class, 'data'])->name('students.data');
+
     // Import Students
     Route::get('/students/import', [ImportStudentController::class, 'showImportForm'])->name('students.import.form');
     Route::post('/students/import', [ImportStudentController::class, 'import'])->name('students.import');
@@ -48,6 +50,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
     Route::post('/enrollments/{id}/promote', [EnrollmentController::class, 'promote'])->name('enrollments.promote');
     Route::get('/students/{id}/enrollments', [StudentController::class, 'enrollmentHistory'])->name('students.enrollmentHistory');
+
 
     
     // Payments
