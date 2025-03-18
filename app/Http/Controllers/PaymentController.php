@@ -30,9 +30,9 @@ class PaymentController extends Controller
         
         $data = $request->only(['student_id', 'enrollment_id', 'amount', 'description', 'period']);
         $data['payment_date'] = Carbon::now();
+        $data['user_id'] = auth()->id(); // Registra el usuario que realiza el pago
         $payment = Payment::create($data);
         
-        // Generar número de recibo: YYYYMMDD-000X
         $datePart = Carbon::now()->format('Ymd');
         $receiptNumber = $datePart . '-' . str_pad($payment->id, 4, '0', STR_PAD_LEFT);
         $payment->receipt_number = $receiptNumber;
@@ -63,7 +63,7 @@ class PaymentController extends Controller
             'schoolName'=> $schoolName,
             'logoPath'  => $logoPath,
         ];
-        $pdf = PDF::loadView('payments.receipt', $data);
+        $pdf = Pdf::loadView('payments.receipt', $data);
         return $pdf->download('recibo_' . $payment->receipt_number . '.pdf');
     }
     

@@ -59,6 +59,7 @@ class StudentController extends Controller
         $student = Student::with(['enrollments.course'])->findOrFail($id);
         return view('students.enrollment_history_modal', compact('student'));
     }
+    
     public function edit($id)
     {
         $student = Student::findOrFail($id);
@@ -77,8 +78,9 @@ class StudentController extends Controller
             'telefono' => 'nullable|string',
             'email' => 'nullable|email'
         ]);
-        $student->update($request->all());
+        $data = $request->all();
+        $data['updated_by'] = auth()->id(); // Registrar el usuario que actualiza
+        $student->update($data);
         return redirect()->route('students.index')->with('success', 'Estudiante actualizado correctamente.');
     }
 }
-// Compare this snippet from app/Http/Controllers/EnrollmentController.php:
