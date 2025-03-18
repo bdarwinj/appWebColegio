@@ -27,18 +27,19 @@
 <div class="container">
     <h2 class="text-center mb-4" style="color: #003366;">Listado de Estudiantes</h2>
     <div class="mb-3 d-flex justify-content-between">
-        <!-- Botón para abrir modal de agregar estudiante -->
-        <div>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-                <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
-            </button>
-        </div>
-        <!-- Botón para abrir modal de importar estudiantes -->
-        <div>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importStudentModal">
-                <i class="bi bi-upload"></i> Importar Estudiantes
-            </button>
-        </div>
+        <!-- Mostrar botones de agregar e importar solo para Admin -->
+        @if(Auth::user()->role === 'admin')
+            <div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                    <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
+                </button>
+            </div>
+            <div>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#importStudentModal">
+                    <i class="bi bi-upload"></i> Importar Estudiantes
+                </button>
+            </div>
+        @endif
     </div>
     @if(session('success'))
         <div class="alert alert-success d-flex align-items-center">
@@ -71,14 +72,16 @@
                 <td>{{ $student->telefono }}</td>
                 <td>{{ $student->active ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <!-- Botón para ver detalles -->
+                    <!-- Botón para ver detalles (todos pueden ver) -->
                     <button type="button" class="btn btn-sm btn-info btn-view-details btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#viewStudentModal">
                         <i class="bi bi-eye"></i> Ver
                     </button>
-                    <!-- Botón para editar -->
-                    <button type="button" class="btn btn-sm btn-warning btn-edit-student btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#editStudentModal">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
+                    <!-- Botón para editar solo para admin -->
+                    @if(Auth::user()->role === 'admin')
+                        <button type="button" class="btn btn-sm btn-warning btn-edit-student btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -87,6 +90,7 @@
 </div>
 
 <!-- Modal: Agregar Nuevo Estudiante -->
+@if(Auth::user()->role === 'admin')
 <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -97,7 +101,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-            <!-- Campos de registro (igual que antes) -->
+            <!-- Campos de registro -->
             <div class="mb-3">
                 <label for="identificacion" class="form-label">Número de Identificación</label>
                 <input type="text" class="form-control" id="identificacion" name="identificacion" required>
@@ -144,8 +148,10 @@
     </div>
   </div>
 </div>
+@endif
 
 <!-- Modal: Importar Estudiantes -->
+@if(Auth::user()->role === 'admin')
 <div class="modal fade" id="importStudentModal" tabindex="-1" aria-labelledby="importStudentModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -169,28 +175,7 @@
     </div>
   </div>
 </div>
-
-<!-- Modal: Ver Detalles del Estudiante (para mostrar historial de inscripciones) -->
-<div class="modal fade" id="enrollmentHistoryModal" tabindex="-1" aria-labelledby="enrollmentHistoryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="enrollmentHistoryModalLabel">Historial de Inscripciones</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body" id="enrollmentHistoryContent">
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+@endif
 
 <!-- Modal: Ver Detalles del Estudiante (para ver otros detalles) -->
 <div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModalLabel" aria-hidden="true">
@@ -231,6 +216,28 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Ver Historial de Inscripciones (al hacer doble click en una fila) -->
+<div class="modal fade" id="enrollmentHistoryModal" tabindex="-1" aria-labelledby="enrollmentHistoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="enrollmentHistoryModalLabel">Historial de Inscripciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" id="enrollmentHistoryContent">
+        <div class="text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
