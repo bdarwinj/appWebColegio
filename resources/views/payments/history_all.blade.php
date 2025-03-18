@@ -66,7 +66,7 @@
             @foreach($payments as $payment)
             <tr>
                 <td>{{ $payment->receipt_number }}</td>
-                <td>{{ $payment->amount }}</td>
+                <td>{{ number_format($payment->amount, 2, ',', '.') }}</td>
                 <td>{{ $payment->payment_date }}</td>
                 <td>{{ $payment->description }}</td>
                 <td>{{ $payment->period }}</td>

@@ -25,8 +25,7 @@
         </thead>
         <tbody>
             @foreach($payments as $payment)
-            <tr>
-                <td>{{ $payment->receipt_number }}</td>
+            <tr><td>{{ $payment->receipt_number }}</td>
                 <td>{{ $payment->amount }}</td>
                 <td>{{ $payment->payment_date }}</td>
                 <td>{{ $payment->description }}</td>

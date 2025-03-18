@@ -92,11 +92,11 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Mes ({{ $currentMonth }})
-                            <span class="badge rounded-pill">{{ $totalMonth }}</span>
+                            <span class="badge rounded-pill">{{ number_format($totalMonth, 2, ',', '.') }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Año ({{ $currentYear }})
-                            <span class="badge rounded-pill">{{ $totalYear }}</span>
+                            <span class="badge rounded-pill">{{ number_format($totalYear, 2, ',', '.') }}</span>
                         </li>
                     </ul>
                 </div>
@@ -110,11 +110,26 @@
                     <span class="badge bg-danger rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top" title="Estos estudiantes no han realizado pagos en el mes actual">{{ count($studentsWithoutPayment) }}</span>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
-                        @foreach($studentsWithoutPayment as $student)
-                            <li class="list-group-item">{{ $student->identificacion }} - {{ $student->nombre }} {{ $student->apellido }}</li>
-                        @endforeach
-                    </ul>
+                    <div class="table-responsive">
+                        <table id="studentsWithoutPaymentTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Identificación</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($studentsWithoutPayment as $student)
+                                    <tr>
+                                        <td>{{ $student->identificacion }}</td>
+                                        <td>{{ $student->nombre }}</td>
+                                        <td>{{ $student->apellido }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,5 +146,15 @@
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
+</script>
+<script>
+    $(document).ready(function(){
+        $('#studentsWithoutPaymentTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+            },
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
+        });
+    });
 </script>
 @endsection
