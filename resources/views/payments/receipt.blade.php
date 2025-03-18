@@ -5,17 +5,65 @@
     <meta charset="UTF-8">
     <title>Recibo de Pago</title>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; margin: 0; padding: 0; }
-        .header { text-align: center; margin-bottom: 20px; position: relative; }
-        .header img { max-height: 60px; position: absolute; left: 0; top: 0; }
-        .header h2 { font-size: 18px; color: #003366; margin: 0; padding-top: 10px; }
-        .header h3 { font-size: 14px; color: #003366; margin: 5px 0; }
-        .header .line { border-bottom: 1px solid #003366; margin-top: 10px; }
-        .details, .payment-info { width: 80%; margin: 0 auto 10px; background-color: #F0F0F0; border-radius: 5px; padding: 10px; }
-        .details table, .payment-info table { width: 100%; }
-        .details td, .payment-info td { padding: 5px; vertical-align: top; }
-        .details td strong, .payment-info td strong { color: #003366; }
-        .payment-info .amount { color: #0066CC; font-weight: bold; }
+        body { 
+            font-family: DejaVu Sans, sans-serif; 
+            font-size: 12px; 
+            margin: 0; 
+            padding: 0; 
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            position: relative; 
+        }
+        .header img { 
+            max-height: 60px; 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+        }
+        .header h2 { 
+            font-size: 18px; 
+            color: #003366; 
+            margin: 0; 
+            padding-top: 10px; 
+        }
+        .header h3 { 
+            font-size: 14px; 
+            color: #003366; 
+            margin: 5px 0; 
+        }
+        .header .line { 
+            border-bottom: 1px solid #003366; 
+            margin-top: 10px; 
+        }
+        .details, .payment-info { 
+            width: 80%; 
+            margin: 0 auto 10px; 
+            background-color: #F0F0F0; 
+            border-radius: 5px; 
+            padding: 10px; 
+        }
+        .details table, .payment-info table { 
+            width: 100%; 
+        }
+        .details td, .payment-info td { 
+            padding: 5px; 
+            vertical-align: top; 
+        }
+        .details td strong, .payment-info td strong { 
+            color: #003366; 
+        }
+        .payment-info .amount { 
+            color: #0066CC; 
+            font-weight: bold; 
+        }
+        .footer { 
+            text-align: center; 
+            font-size: 10px; 
+            color: #555; 
+            margin-top: 20px; 
+        }
     </style>
 </head>
 <body>
@@ -46,6 +94,9 @@
                 <td><strong>Descripción:</strong> {{ $payment->description }}</td>
             </tr>
         </table>
+    </div>
+    <div class="footer">
+        Registrado por el usuario: {{ $payment->user ? $payment->user->username : 'N/A' }}
     </div>
 </body>
 </html>

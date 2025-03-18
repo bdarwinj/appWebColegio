@@ -30,7 +30,7 @@ class PaymentController extends Controller
         
         $data = $request->only(['student_id', 'enrollment_id', 'amount', 'description', 'period']);
         $data['payment_date'] = Carbon::now();
-        $data['user_id'] = auth()->id(); // Registra el usuario que realiza el pago
+        $data['user_id'] = auth()->id(); // Guardar el usuario que registra el pago
         $payment = Payment::create($data);
         
         $datePart = Carbon::now()->format('Ymd');
@@ -52,25 +52,24 @@ class PaymentController extends Controller
     
     public function receipt($id)
     {
-        $payment = Payment::findOrFail($id);
-        $student = $payment->student;
+        $payment = Payment::with('user', 'student')->findOrFail($id);
         $schoolName = DB::table('config')->where('key', 'SCHOOL_NAME')->value('value') ?? 'Colegio Ejemplo';
         $logoPath = DB::table('config')->where('key', 'LOGO_PATH')->value('value') ?? 'assets/logo.png';
         
         $data = [
             'payment'   => $payment,
-            'student'   => $student,
+            'student'   => $payment->student,
             'schoolName'=> $schoolName,
             'logoPath'  => $logoPath,
         ];
-        $pdf = Pdf::loadView('payments.receipt', $data);
+        $pdf = PDF::loadView('payments.receipt', $data);
         return $pdf->download('recibo_' . $payment->receipt_number . '.pdf');
     }
     
     // Nuevo método para historial global con búsqueda
     public function historyAll(Request $request)
     {
-        $query = Payment::query()->with('student');
+        $query = Payment::query()->with(['student', 'user']);
         
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -90,7 +89,7 @@ class PaymentController extends Controller
     
     public function history($student_id)
     {
-        $payments = Payment::where('student_id', $student_id)->orderBy('payment_date', 'desc')->get();
+        $payments = Payment::with('user')->where('student_id', $student_id)->orderBy('payment_date', 'desc')->get();
         return view('payments.history', compact('payments', 'student_id'));
     }
 }

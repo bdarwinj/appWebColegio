@@ -30,6 +30,10 @@
     .pagination {
         margin-top: 20px;
     }
+    .small-text {
+        font-size: 10px;
+        color: #555;
+    }
 </style>
 
 <div class="container">
@@ -45,7 +49,7 @@
             </button>
         </div>
     </form>
-    <table class="table table-bordered table-striped shadow-sm">
+    <table id="paymentsTable" class="table table-bordered table-striped shadow-sm">
         <thead class="table-dark">
             <tr>
                 <th>Nº Recibo</th>
@@ -54,6 +58,7 @@
                 <th>Descripción</th>
                 <th>Periodo</th>
                 <th>Estudiante</th>
+                <th class="small-text">Registrado por</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -72,6 +77,9 @@
                         N/A
                     @endif
                 </td>
+                <td class="small-text">
+                    {{ $payment->user ? $payment->user->username : 'N/A' }}
+                </td>
                 <td>
                     <a href="{{ route('payments.receipt', $payment->id) }}" class="btn btn-sm btn-primary btn-action">
                         <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
@@ -86,4 +94,17 @@
         {{ $payments->withQueryString()->links() }}
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function(){
+        $('#paymentsTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+            },
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
+        });
+    });
+</script>
 @endsection
