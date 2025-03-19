@@ -20,6 +20,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Database Backup Paths
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define the paths to the mysqldump and mysql executables.
+    | Ensure these paths are correct for your system environment.
+    |
+    */
+
+    'mysqldump_path' => env('MYSQLDUMP_PATH', '/usr/bin/mysqldump'),
+    'mysql_path' => env('MYSQL_PATH', '/usr/bin/mysql'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
