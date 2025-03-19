@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseFeeController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ImportStudentController;
+use App\Http\Controllers\DatabaseBackupController;
 
 Route::get('/', function(){
     return redirect()->route('login');
@@ -66,4 +67,7 @@ Route::middleware('auth')->group(function(){
     // Configuración
     Route::get('/config/edit', [ConfigController::class, 'edit'])->name('config.edit');
     Route::put('/config', [ConfigController::class, 'update'])->name('config.update');
+    // Database Backup/Restore
+    Route::get('/database/backup', [DatabaseBackupController::class, 'backup'])->name('database.backup');
+    Route::post('/database/restore', [DatabaseBackupController::class, 'restore'])->name('database.restore');
 });

@@ -34,15 +34,14 @@
         margin-right: 10px;
     }
 </style>
-
 <div class="container">
     <h2 class="text-center mb-4" style="color: #003366;">Dashboard</h2>
     <div class="row">
         <!-- Estadísticas Generales -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-bar-chart icon"></i>Estadísticas Generales
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-bar-chart icon"></i> Estadísticas Generales
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -65,8 +64,8 @@
         <!-- Alumnos por Curso -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-book icon"></i>Alumnos por Curso
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-book icon"></i> Alumnos por Curso
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -85,8 +84,8 @@
         <!-- Pagos Recogidos -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-cash icon"></i>Pagos Recogidos
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-cash icon"></i> Pagos Recogidos
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -105,8 +104,8 @@
         <!-- Alumnos sin Pago en el Mes Actual -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-exclamation-triangle icon"></i>Alumnos sin Pago en el Mes Actual
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle icon"></i> Alumnos sin Pago en el Mes Actual
                     <span class="badge bg-danger rounded-pill" data-bs-toggle="tooltip" data-bs-placement="top" title="Estos estudiantes no han realizado pagos en el mes actual">{{ count($studentsWithoutPayment) }}</span>
                 </div>
                 <div class="card-body">
@@ -142,10 +141,10 @@
 
 <!-- Inicializar tooltips -->
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 </script>
 <script>
     $(document).ready(function(){
