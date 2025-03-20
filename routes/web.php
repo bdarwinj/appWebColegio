@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function(){
     // Course Fees
     Route::get('/course-fees/config', [CourseFeeController::class, 'config'])->name('course_fees.config');
     Route::post('/course-fees', [CourseFeeController::class, 'store'])->name('course_fees.store');
+    Route::get('/course-fees/status', [CourseFeeController::class, 'status'])->name('course_fees.status');
     
     // Students
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');

@@ -95,6 +95,18 @@
             <li><a class="dropdown-item" href="{{ route('payments.history.all') }}">Historial de Pagos</a></li>
           </ul>
         </li>
+         <!-- Mensualidades -->
+         @if(Auth::user()->role === 'admin')
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="feesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mensualidades
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="feesDropdown">
+            <li><a class="dropdown-item" href="{{ route('course_fees.config') }}">Configurar Tarifas</a></li>
+            <li><a class="dropdown-item" href="{{ route('course_fees.status') }}">Estado de Cuenta</a></li>
+          </ul>
+        </li>
+        @endif
         <!-- Usuarios -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="usersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
