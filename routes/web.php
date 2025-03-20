@@ -46,7 +46,10 @@ Route::middleware('auth')->group(function(){
     Route::get('/students/{id}/enrollments', [StudentController::class, 'enrollmentHistory'])->name('students.enrollmentHistory');
     Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
-    
+    // Exportación de estudiantes
+    Route::get('/students/export/pdf', [\App\Http\Controllers\ExportStudentController::class, 'exportPdf'])->name('students.export.pdf');
+    Route::get('/students/export/excel', [\App\Http\Controllers\ExportStudentController::class, 'exportExcel'])->name('students.export.excel');
+        
     // Import Students
     Route::get('/students/import', [ImportStudentController::class, 'showImportForm'])->name('students.import.form');
     Route::post('/students/import', [ImportStudentController::class, 'import'])->name('students.import');

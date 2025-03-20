@@ -49,6 +49,24 @@
             <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
         </div>
     @endif
+    <div class="mb-3 d-flex justify-content-between">
+    <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+            <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
+        </button>
+    </div>
+    <div>
+        @if(Auth::user()->role === 'admin')
+        <a href="{{ route('students.export.pdf') }}" class="btn btn-danger">
+            <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
+        </a>
+        <a href="{{ route('students.export.excel') }}" class="btn btn-success">
+            <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+        </a>
+        @endif
+      </div>
+  </div>
+    
     <table id="studentsTable" class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
