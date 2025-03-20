@@ -3,7 +3,7 @@
 if (!function_exists('calculate_student_balance')) {
     /**
      * Calcula el estado de cuenta de mensualidades para un estudiante en un año académico dado.
-     * Se asume 12 mensualidades.
+     * Se determina el número de meses transcurridos en el año (asumiendo inicio en enero).
      *
      * @param int $studentId
      * @param int $academicYear
@@ -22,9 +22,18 @@ if (!function_exists('calculate_student_balance')) {
             ->where('academic_year', $academicYear)
             ->first();
         $fee = $courseFee ? $courseFee->fee : 0;
-        $expectedTotal = $fee * 12;
         
-        // Sumar los pagos realizados en ese año para el estudiante
+        // Determinar el número de meses transcurridos en el año
+        $currentYear = date('Y');
+        if ($academicYear == $currentYear) {
+            $elapsedMonths = (int) date('n'); // Mes actual
+        } elseif ($academicYear < $currentYear) {
+            $elapsedMonths = 12;
+        } else {
+            $elapsedMonths = 0;
+        }
+        
+        $expectedTotal = $fee * $elapsedMonths;
         $totalPaid = \App\Models\Payment::where('student_id', $studentId)
             ->whereYear('payment_date', $academicYear)
             ->sum('amount');
@@ -33,11 +42,12 @@ if (!function_exists('calculate_student_balance')) {
         $pendingMonths = ($fee > 0 && $balance > 0) ? ceil($balance / $fee) : 0;
         
         return [
-            'monthly_fee'   => $fee,
-            'expected_total'=> $expectedTotal,
-            'total_paid'    => $totalPaid,
-            'balance'       => $balance,
-            'pending_months'=> $pendingMonths
+            'monthly_fee'    => $fee,
+            'elapsed_months' => $elapsedMonths,
+            'expected_total' => $expectedTotal,
+            'total_paid'     => $totalPaid,
+            'balance'        => $balance,
+            'pending_months' => $pendingMonths
         ];
     }
 }

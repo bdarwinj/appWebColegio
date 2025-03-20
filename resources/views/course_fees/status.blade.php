@@ -5,54 +5,55 @@
 @section('content')
 <div class="container">
     <h2 class="mb-4">Estado de Cuenta de Mensualidades - Año {{ $academicYear }}</h2>
-    
-    @if(count($studentsInMora) == 0)
-        <div class="alert alert-success">
-            Todos los estudiantes están al día.
-        </div>
-    @else
-        <div class="alert alert-warning">
-            <strong>Total Adeudado Global:</strong> ${{ number_format($globalBalance, 2) }} <br>
-            <strong>Total de Meses Pendientes:</strong> {{ $globalPendingMonths }}
-        </div>
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Identificación</th>
-                    <th>Nombre</th>
-                    <th>Curso</th>
-                    <th>Tarifa Mensual</th>
-                    <th>Total Esperado</th>
-                    <th>Total Pagado</th>
-                    <th>Balance</th>
-                    <th>Meses Pendientes</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($studentsInMora as $student)
-                    <tr>
-                        <td>{{ $student->id }}</td>
-                        <td>{{ $student->identificacion }}</td>
-                        <td>{{ $student->nombre }} {{ $student->apellido }}</td>
-                        <td>
-                            @if($student->course)
-                                {{ $student->course->name }}
-                                @if($student->course->seccion) - {{ $student->course->seccion }} @endif
-                                @if($student->course->jornada) - {{ $student->course->jornada }} @endif
-                            @else
-                                N/A
-                            @endif
-                        </td>
-                        <td>${{ number_format($student->balanceData['monthly_fee'], 2) }}</td>
-                        <td>${{ number_format($student->balanceData['expected_total'], 2) }}</td>
-                        <td>${{ number_format($student->balanceData['total_paid'], 2) }}</td>
-                        <td>${{ number_format($student->balanceData['balance'], 2) }}</td>
-                        <td>{{ $student->balanceData['pending_months'] }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
+    <table id="courseFeesTable" class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Identificación</th>
+                <th>Nombre</th>
+                <th>Curso</th>
+                <th>Tarifa Mensual</th>
+                <th>Total Esperado</th>
+                <th>Total Pagado</th>
+                <th>Balance</th>
+                <th>Meses Pendientes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Se llenará de forma asíncrona -->
+        </tbody>
+    </table>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function(){
+        $('#courseFeesTable').DataTable({
+            "processing": true,
+            "serverSide": false,
+            "ajax": {
+                "url": "{{ route('course_fees.status.ajax') }}",
+                "data": {
+                    "academic_year": "{{ $academicYear }}"
+                }
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "identificacion" },
+                { "data": "nombre" },
+                { "data": "course" },
+                { "data": "monthly_fee" },
+                { "data": "expected_total" },
+                { "data": "total_paid" },
+                { "data": "balance" },
+                { "data": "pending_months" }
+            ],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+            },
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
+        });
+    });
+</script>
 @endsection

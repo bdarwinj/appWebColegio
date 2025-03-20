@@ -37,30 +37,40 @@ class CourseFeeController extends Controller
     }
     
     /**
-     * Muestra el estado de cuenta de mensualidades de los estudiantes en mora.
-     *
-     * Filtra a los estudiantes cuyo balance pendiente es mayor que cero y calcula
-     * el total global adeudado y la suma de meses pendientes.
+     * Vista para el estado de cuenta de mensualidades.
      */
     public function status(Request $request)
     {
         $academicYear = $request->input('academic_year', date('Y'));
+        return view('course_fees.status', compact('academicYear'));
+    }
+    
+    /**
+     * Método AJAX para retornar en JSON el listado de estudiantes en mora.
+     */
+    public function statusAjax(Request $request)
+    {
+        $academicYear = $request->input('academic_year', date('Y'));
         $students = \App\Models\Student::with('course')->get();
-        $studentsInMora = [];
-        $globalBalance = 0;
-        $globalPendingMonths = 0;
-        
+        $data = [];
         foreach ($students as $student) {
             $balanceData = calculate_student_balance($student->id, $academicYear);
             if ($balanceData && $balanceData['balance'] > 0) {
-                // Adjuntar la información de balance al estudiante
-                $student->setAttribute('balanceData', $balanceData);
-                $studentsInMora[] = $student;
-                $globalBalance += $balanceData['balance'];
-                $globalPendingMonths += $balanceData['pending_months'];
+                $data[] = [
+                    'id'               => $student->id,
+                    'identificacion'   => $student->identificacion,
+                    'nombre'           => $student->nombre . ' ' . $student->apellido,
+                    'course'           => $student->course ? ($student->course->name .
+                                            ($student->course->seccion ? ' - ' . $student->course->seccion : '') .
+                                            ($student->course->jornada ? ' - ' . $student->course->jornada : '')) : 'N/A',
+                    'monthly_fee'      => number_format($balanceData['monthly_fee'], 2),
+                    'expected_total'   => number_format($balanceData['expected_total'], 2),
+                    'total_paid'       => number_format($balanceData['total_paid'], 2),
+                    'balance'          => number_format($balanceData['balance'], 2),
+                    'pending_months'   => $balanceData['pending_months']
+                ];
             }
         }
-        
-        return view('course_fees.status', compact('studentsInMora', 'academicYear', 'globalBalance', 'globalPendingMonths'));
+        return response()->json(['data' => $data]);
     }
 }
