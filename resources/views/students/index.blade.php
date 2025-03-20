@@ -22,6 +22,9 @@
         background-color: #d4edda;
         color: #155724;
     }
+    .dataTables_filter{
+        margin-bottom: 5px;
+    }
 </style>
 
 <div class="container">

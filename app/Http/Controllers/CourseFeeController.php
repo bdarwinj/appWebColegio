@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CourseFee;
 use App\Models\Course;
+use App\Models\Student;
 use Carbon\Carbon;
 
 class CourseFeeController extends Controller
@@ -37,21 +38,34 @@ class CourseFeeController extends Controller
     }
     
     /**
-     * Vista para el estado de cuenta de mensualidades.
+     * Renderiza la vista de estado de cuenta y calcula el resumen global.
      */
     public function status(Request $request)
     {
         $academicYear = $request->input('academic_year', date('Y'));
-        return view('course_fees.status', compact('academicYear'));
+        $students = Student::with('course')->get();
+        $globalBalance = 0;
+        $globalPendingMonths = 0;
+        
+        // Se recorre cada estudiante para calcular el balance (aunque la tabla se cargará por AJAX)
+        foreach ($students as $student) {
+            $balanceData = calculate_student_balance($student->id, $academicYear);
+            if ($balanceData && $balanceData['balance'] > 0) {
+                $globalBalance += $balanceData['balance'];
+                $globalPendingMonths += $balanceData['pending_months'];
+            }
+        }
+        
+        return view('course_fees.status', compact('academicYear', 'globalBalance', 'globalPendingMonths'));
     }
     
     /**
-     * Método AJAX para retornar en JSON el listado de estudiantes en mora.
+     * Método AJAX que retorna en formato JSON el listado de estudiantes en mora.
      */
     public function statusAjax(Request $request)
     {
         $academicYear = $request->input('academic_year', date('Y'));
-        $students = \App\Models\Student::with('course')->get();
+        $students = Student::with('course')->get();
         $data = [];
         foreach ($students as $student) {
             $balanceData = calculate_student_balance($student->id, $academicYear);

@@ -34,6 +34,9 @@
         font-size: 10px;
         color: #555;
     }
+    .dataTables_filter{
+        margin-bottom: 5px;
+    }
 </style>
 
 <div class="container">
