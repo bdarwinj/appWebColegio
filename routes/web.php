@@ -9,6 +9,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseFeeController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ImportStudentController;
 use App\Http\Controllers\DatabaseBackupController;
@@ -69,6 +70,10 @@ Route::middleware('auth')->group(function(){
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+    // Gestión de Usuarios y Cambio de Contraseña
+    Route::get('/password/change', [PasswordController::class, 'showChangeForm'])->name('password.change.form');
+    Route::post('/password/change', [PasswordController::class, 'change'])->name('password.change');
 
     // Configuración
     Route::get('/config/edit', [ConfigController::class, 'edit'])->name('config.edit');

@@ -111,6 +111,8 @@
           <ul class="dropdown-menu" aria-labelledby="usersDropdown">
             <li><a class="dropdown-item" href="{{ route('users.index') }}">Listado de Usuarios</a></li>
             <li><a class="dropdown-item" href="{{ route('users.create') }}">Crear Usuario</a></li>
+            <li><a class="dropdown-item" href="{{ route('password.change.form') }}">Cambiar Contraseña</a>
+            </li>
           </ul>
         </li>
         <!-- Configuración Colegio -->
