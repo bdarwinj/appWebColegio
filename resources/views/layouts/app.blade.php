@@ -87,21 +87,19 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('enrollments.index') }}"><i class="bi bi-pencil-square"></i> Inscripciones</a>
         </li>
-         <!-- Pagos -->
-         <li class="nav-item dropdown">
+        <!-- Pagos -->
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="paymentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Pagos
+            <i class="bi bi-cash"></i> Pagos
           </a>
           <ul class="dropdown-menu" aria-labelledby="paymentsDropdown">
             <li><a class="dropdown-item" href="{{ route('payments.create') }}">Registrar Pago</a></li>
             <li><a class="dropdown-item" href="{{ route('payments.history.all') }}">Historial de Pagos</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <!-- Submenú para Mensualidades -->
+            <!-- Mensualidades -->
             @if(Auth::user()->role === 'admin')
-              <li><a class="dropdown-item" href="{{ route('course_fees.config') }}">Configurar Tarifas</a></li>
-              <li><a class="dropdown-item" href="{{ route('course_fees.status') }}">Estado de Cuenta</a></li>
+            <hr class="dropdown-divider">
+            <li><a class="dropdown-item" href="{{ route('course_fees.config') }}">Configurar Tarifas</a></li>
+            <li><a class="dropdown-item" href="{{ route('course_fees.status') }}">Estado de Cuenta</a></li>
             @endif
           </ul>
         </li>
