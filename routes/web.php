@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseFeeController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ChangeUserPasswordController;
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\ImportStudentController;
 use App\Http\Controllers\DatabaseBackupController;
@@ -74,6 +75,10 @@ Route::middleware('auth')->group(function(){
     // Gestión de Usuarios y Cambio de Contraseña
     Route::get('/password/change', [PasswordController::class, 'showChangeForm'])->name('password.change.form');
     Route::post('/password/change', [PasswordController::class, 'change'])->name('password.change');
+    
+    // Cambio de contraseña para otro usuario (solo admin)
+    Route::get('/users/{id}/change-password', [ChangeUserPasswordController::class, 'showForm'])->name('users.change_password.form');
+    Route::post('/users/{id}/change-password', [ChangeUserPasswordController::class, 'update'])->name('users.change_password');
 
     // Configuración
     Route::get('/config/edit', [ConfigController::class, 'edit'])->name('config.edit');
