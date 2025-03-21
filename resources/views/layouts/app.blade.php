@@ -68,7 +68,9 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="coursesDropdown">
             <li><a class="dropdown-item" href="{{ route('courses.index') }}">Listado de Cursos</a></li>
+            @if(Auth::user()->role === 'admin')
             <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addCourseModal">Agregar Curso</a></li>
+            @endif
           </ul>
         </li>
         <!-- Estudiantes -->
@@ -82,11 +84,12 @@
             <li><a class="dropdown-item" href="{{ route('students.create') }}">Registrar Estudiante</a></li>
             @endif
           </ul>
-        </li>
+        </li>@if(Auth::user()->role === 'admin')
         <!-- Inscripciones -->
         <li class="nav-item">
           <a class="nav-link" href="{{ route('enrollments.index') }}"><i class="bi bi-pencil-square"></i> Inscripciones</a>
         </li>
+        @endif
         <!-- Pagos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="paymentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -109,16 +112,19 @@
             <i class="bi bi-people"></i> Usuarios
           </a>
           <ul class="dropdown-menu" aria-labelledby="usersDropdown">
+            @if(Auth::user()->role === 'admin')
             <li><a class="dropdown-item" href="{{ route('users.index') }}">Listado de Usuarios</a></li>
             <li><a class="dropdown-item" href="{{ route('users.create') }}">Crear Usuario</a></li>
+            @endif
             <li><a class="dropdown-item" href="{{ route('password.change.form') }}">Cambiar Contraseña</a>
             </li>
           </ul>
         </li>
-        <!-- Configuración Colegio -->
+        <!-- Configuración Colegio -->@if(Auth::user()->role === 'admin')
         <li class="nav-item">
           <a class="nav-link" href="{{ route('config.edit') }}"><i class="bi bi-gear"></i> Configuración Colegio</a>
         </li>
+        @endif
       </ul>
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">

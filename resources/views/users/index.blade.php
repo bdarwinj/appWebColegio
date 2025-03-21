@@ -3,11 +3,44 @@
 @section('title', 'Listado de Usuarios')
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Listado de Usuarios</h2>
+<style>
+    .table thead th {
+        background-color: #003366; /* Azul oscuro */
+        color: white;
+    }
+    .table tbody tr:hover {
+        background-color: #f0f0f0; /* Gris claro al pasar el cursor */
+        cursor: pointer;
+    }
+    .alert {
+        border-radius: 4px;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .modal-header {
+        background-color: #003366;
+        color: white;
+    }
+    .modal-content {
+        border-radius: 8px;
+    }
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+    }
+</style>
+
+<div class="container py-4">
+    <h2 class="text-center mb-4" style="color: #003366;">Listado de Usuarios</h2>
+    
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success d-flex align-items-center mb-4">
+            <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+        </div>
     @endif
+    
     <table id="usersTable" class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
@@ -38,11 +71,9 @@
         <h5 class="modal-title" id="changeUserPasswordModalLabel">Cambiar Contraseña</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
-      <div class="modal-body">
-        <div class="text-center">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Cargando...</span>
-            </div>
+      <div class="modal-body text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
         </div>
       </div>
     </div>
@@ -52,7 +83,6 @@
 @endsection
 
 @section('scripts')
-<!-- Inicializar DataTables (si lo deseas) -->
 <script>
 $(document).ready(function(){
     var table = $('#usersTable').DataTable({
