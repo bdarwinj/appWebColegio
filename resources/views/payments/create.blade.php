@@ -60,13 +60,30 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="period" class="form-label">Periodo (Mes)</label>
+            <label for="period" class="form-label">Periodo (Mes) <small>(opcional)</small></label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                <select class="form-select" id="period" name="period" required>
-                    @for ($i = 1; $i <= 12; $i++)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
+                <select class="form-select" id="period" name="period">
+                    <option value="">-- No especificado --</option>
+                    @php
+                        $meses = [
+                            1  => 'Enero',
+                            2  => 'Febrero',
+                            3  => 'Marzo',
+                            4  => 'Abril',
+                            5  => 'Mayo',
+                            6  => 'Junio',
+                            7  => 'Julio',
+                            8  => 'Agosto',
+                            9  => 'Septiembre',
+                            10 => 'Octubre',
+                            11 => 'Noviembre',
+                            12 => 'Diciembre'
+                        ];
+                    @endphp
+                    @foreach ($meses as $numero => $mes)
+                        <option value="{{ $numero }}">{{ $mes }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>

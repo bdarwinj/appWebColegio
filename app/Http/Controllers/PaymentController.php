@@ -24,11 +24,15 @@ class PaymentController extends Controller
             'student_id'   => 'required|numeric',
             'amount'       => 'required|numeric|min:0.01',
             'description'  => 'required|string',
-            'period'       => 'required|numeric|min:1|max:12',
+            'period'       => 'nullable|numeric|min:1|max:12', // Ahora es opcional
             'enrollment_id'=> 'nullable|numeric'
         ]);
         
         $data = $request->only(['student_id', 'enrollment_id', 'amount', 'description', 'period']);
+        // Si el campo 'period' está vacío, lo almacenamos como null.
+        if(empty($data['period'])) {
+            $data['period'] = null;
+        }
         $data['payment_date'] = Carbon::now();
         $data['user_id'] = auth()->id(); // Guardar el usuario que registra el pago
         $payment = Payment::create($data);
