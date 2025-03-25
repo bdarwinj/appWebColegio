@@ -100,7 +100,7 @@
                         @foreach($courses as $course)
                             <div class="col-12 col-md-6 mb-2">
                                 <ul class="list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center hoverante">
                                         {{ $course->name }}
                                         @if($course->seccion) - {{ $course->seccion }} @endif
                                         @if($course->jornada) - {{ $course->jornada }} @endif
@@ -174,7 +174,13 @@
     </div>
 </div>
 
-
+<!-- Inicializar tooltips -->
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
 <script>
     $(document).ready(function(){
         $('#studentsWithoutPaymentTable').DataTable({

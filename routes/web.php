@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function(){
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
     // Agregar la ruta para ver estudiantes por curso:
     Route::get('/courses/{id}/students', [CourseController::class, 'students'])->name('courses.students');
-    
+
     // Course Fees
     Route::get('/course-fees/config', [CourseFeeController::class, 'config'])->name('course_fees.config');
     Route::post('/course-fees', [CourseFeeController::class, 'store'])->name('course_fees.store');
@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/students/{id}/enrollments', [StudentController::class, 'enrollmentHistory'])->name('students.enrollmentHistory');
     Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
     Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
+    // Ruta para mostrar los detalles completos del estudiante (vista completa)
+    Route::get('/students/{id}/details_page', [StudentController::class, 'detailsPage'])->name('students.details_page');
+
     // Exportación de estudiantes
     Route::get('/students/export/pdf', [\App\Http\Controllers\ExportStudentController::class, 'exportPdf'])->name('students.export.pdf');
     Route::get('/students/export/excel', [\App\Http\Controllers\ExportStudentController::class, 'exportExcel'])->name('students.export.excel');

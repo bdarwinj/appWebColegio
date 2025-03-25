@@ -29,7 +29,9 @@
                 <td>{{ $payment->amount }}</td>
                 <td>{{ $payment->payment_date }}</td>
                 <td>{{ $payment->description }}</td>
-                <td>{{ $payment->period }}</td>
+                <td>{{ $payment->period }} <a href="{{ route('payments.receipt', $payment->id) }}" class="btn btn-sm btn-primary btn-action">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
+                    </a></td>
             </tr>
             @endforeach
         </tbody>
