@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Esencial para móviles -->
     <title>@yield('title', 'Sistema Colegio')</title>
     <!-- Bootstrap CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -40,21 +41,47 @@
         .navbar-nav .nav-item .nav-link i {
             margin-right: 5px;
         }
+        /* Mejoras para dispositivos móviles */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                text-align: center; /* Centra el menú en móviles */
+            }
+            .navbar-nav .nav-item {
+                margin-bottom: 10px; /* Espaciado entre ítems */
+            }
+            .navbar-brand {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%; /* Centra el logo en móviles */
+            }
+            .navbar-brand img {
+                max-height: 50px; /* Logo más grande en móviles */
+            }
+            .navbar-toggler {
+                position: absolute;
+                right: 10px;
+                top: 10px; /* Botón hamburguesa bien posicionado */
+            }
+            .container {
+                padding: 10px; /* Reduce el padding en móviles */
+            }
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <a class="navbar-brand" href="{{ route('dashboard') }}">
         @if($logoPath)
             <img src="{{ asset('storage/' . $logoPath) }}" alt="Logo del Colegio">
         @endif
         {{ $schoolName }}
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <!-- Menú de navegación con iconos -->
@@ -84,7 +111,8 @@
             <li><a class="dropdown-item" href="{{ route('students.create') }}">Registrar Estudiante</a></li>
             @endif
           </ul>
-        </li>@if(Auth::user()->role === 'admin')
+        </li>
+        @if(Auth::user()->role === 'admin')
         <!-- Inscripciones -->
         <li class="nav-item">
           <a class="nav-link" href="{{ route('enrollments.index') }}"><i class="bi bi-pencil-square"></i> Inscripciones</a>
@@ -98,7 +126,6 @@
           <ul class="dropdown-menu" aria-labelledby="paymentsDropdown">
             <li><a class="dropdown-item" href="{{ route('payments.create') }}">Registrar Pago</a></li>
             <li><a class="dropdown-item" href="{{ route('payments.history.all') }}">Historial de Pagos</a></li>
-            <!-- Mensualidades -->
             @if(Auth::user()->role === 'admin')
             <hr class="dropdown-divider">
             <li><a class="dropdown-item" href="{{ route('course_fees.config') }}">Configurar Tarifas</a></li>
@@ -116,11 +143,11 @@
             <li><a class="dropdown-item" href="{{ route('users.index') }}">Listado de Usuarios</a></li>
             <li><a class="dropdown-item" href="{{ route('users.create') }}">Crear Usuario</a></li>
             @endif
-            <li><a class="dropdown-item" href="{{ route('password.change.form') }}">Cambiar Contraseña</a>
-            </li>
+            <li><a class="dropdown-item" href="{{ route('password.change.form') }}">Cambiar Contraseña</a></li>
           </ul>
         </li>
-        <!-- Configuración Colegio -->@if(Auth::user()->role === 'admin')
+        @if(Auth::user()->role === 'admin')
+        <!-- Configuración Colegio -->
         <li class="nav-item">
           <a class="nav-link" href="{{ route('config.edit') }}"><i class="bi bi-gear"></i> Configuración Colegio</a>
         </li>
@@ -142,9 +169,9 @@
 </div>
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap Bundle with Popper (elige una versión, por ejemplo, 5.3.0) -->
+<!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables JS CDN (cargado una sola vez) -->
+<!-- DataTables JS CDN -->
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <!-- JS de DataTables Buttons y dependencias -->
 <script src="//cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>

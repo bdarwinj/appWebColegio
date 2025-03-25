@@ -47,6 +47,7 @@
                 <th>ID</th>
                 <th>Nombre de Usuario</th>
                 <th>Rol</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody style="cursor: pointer;">
@@ -55,6 +56,20 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->username }}</td>
                 <td>{{ $user->role }}</td>
+                <td>
+                    <!-- Botón para cambiar contraseña (se carga vía doble clic) -->
+                    <button type="button" class="btn btn-sm btn-warning btn-edit-user" data-user-id="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#changeUserPasswordModal">
+                        <i class="bi bi-pencil"></i> Cambiar Clave
+                    </button>
+                    <!-- Botón para eliminar usuario -->
+                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -85,6 +100,7 @@
 @section('scripts')
 <script>
 $(document).ready(function(){
+    // Inicializar DataTables en la tabla de usuarios
     var table = $('#usersTable').DataTable({
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
@@ -92,7 +108,7 @@ $(document).ready(function(){
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
     });
 
-    // Delegar el evento de doble click sobre el tbody
+    // Delegar el evento de doble clic sobre el tbody (para cargar formulario de cambio de contraseña)
     $('#usersTable tbody').on('dblclick', 'tr', function(){
         var userId = $(this).data('user-id');
         console.log("Fila doble clickeada. userId:", userId);
@@ -100,6 +116,36 @@ $(document).ready(function(){
             alert("No se encontró el ID del usuario en la fila.");
             return;
         }
+        var modalContent = $('#changeUserPasswordContent');
+        modalContent.html(
+          '<div class="modal-header">' +
+            '<h5 class="modal-title" id="changeUserPasswordModalLabel">Cambiar Contraseña</h5>' +
+            '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>' +
+          '</div>' +
+          '<div class="modal-body text-center">' +
+            '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>' +
+          '</div>'
+        );
+        
+        $.ajax({
+            url: '/users/' + userId + '/change-password',
+            type: 'GET',
+            success: function(response) {
+                modalContent.html(response);
+                var myModal = new bootstrap.Modal(document.getElementById('changeUserPasswordModal'));
+                myModal.show();
+            },
+            error: function(xhr, status, error) {
+                modalContent.html('<p class="text-danger">Error al cargar el formulario. Inténtelo nuevamente.</p>');
+                console.error("AJAX error:", status, error);
+            }
+        });
+    });
+
+    // También, si se hace clic en el botón "Cambiar Clave" dentro de cada fila, se puede cargar el formulario (esto es opcional)
+    $('.btn-edit-user').on('click', function(e){
+        e.stopPropagation(); // Evita que el doble clic se dispare
+        var userId = $(this).data('user-id');
         var modalContent = $('#changeUserPasswordContent');
         modalContent.html(
           '<div class="modal-header">' +

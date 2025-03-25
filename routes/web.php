@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    // Agregar la ruta para ver estudiantes por curso:
+    Route::get('/courses/{id}/students', [CourseController::class, 'students'])->name('courses.students');
     
     // Course Fees
     Route::get('/course-fees/config', [CourseFeeController::class, 'config'])->name('course_fees.config');
@@ -71,7 +73,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
-
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    
     // Gestión de Usuarios y Cambio de Contraseña
     Route::get('/password/change', [PasswordController::class, 'showChangeForm'])->name('password.change.form');
     Route::post('/password/change', [PasswordController::class, 'change'])->name('password.change');

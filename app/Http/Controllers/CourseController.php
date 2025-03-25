@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\Student;
 
 class CourseController extends Controller
 {
@@ -42,4 +43,16 @@ class CourseController extends Controller
     {
         return Course::where('name', $grade)->where('active', 1)->get();
     }
+/**
+     * Muestra la lista de estudiantes de un curso específico.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function students($id)
+    {
+        $course = Course::with('students')->findOrFail($id);
+        return view('courses.students', compact('course'));
+    }
+    
 }

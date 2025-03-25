@@ -33,7 +33,8 @@ class DashboardController extends Controller
         
         $studentsPaidIds = $paymentsMonth->pluck('student_id')->unique();
         $studentsWithoutPayment = Student::whereNotIn('id', $studentsPaidIds)->get();
+        $courses = Course::withCount('students')->get(); // Obtiene cursos con cantidad de alumnos
         
-        return view('dashboard', compact('totalCourses', 'coursesWithStudents', 'totalStudents', 'courseCount', 'totalMonth', 'totalYear', 'studentsWithoutPayment', 'currentMonth', 'currentYear'));
+        return view('dashboard', compact('totalCourses', 'coursesWithStudents', 'totalStudents', 'courseCount', 'totalMonth', 'totalYear', 'studentsWithoutPayment', 'currentMonth', 'currentYear','courses'));
     }
 }
