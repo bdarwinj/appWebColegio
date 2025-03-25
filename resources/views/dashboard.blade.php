@@ -6,15 +6,18 @@
 <style>
     .card {
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         margin-bottom: 20px;
+        transition: box-shadow 0.3s ease;
+    }
+    .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .card-header {
         background-color: #003366;
         color: white;
         font-weight: bold;
-        display: flex;
-        align-items: center;
+        padding: 15px;
     }
     .list-group-item {
         border: none;
@@ -27,10 +30,20 @@
         font-size: 1.1em;
         background-color: #0066CC;
         color: white;
-        border-radius: 50px;
+        border-radius: 20px;
+        padding: 5px 10px;
+    }
+    .table thead th {
+        background-color: #003366;
+        color: white;
+        font-weight: bold;
+    }
+    .table tbody tr:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
     }
     .btn {
-        transition: background-color 0.3s;
+        transition: background-color 0.3s ease;
     }
     .btn:hover {
         background-color: #004080;
@@ -38,15 +51,6 @@
     }
     .icon {
         margin-right: 10px;
-    }
-    .table-responsive {
-        overflow-x: auto;
-    }
-    .borderte {
-        border-bottom: 1px solid #f0f0f0;
-    }
-    .hoverante:hover {
-        background-color: #f0f0f0;
     }
     /* Ajustes para móviles */
     @media (max-width: 768px) {
@@ -65,7 +69,6 @@
 <div class="container py-4">
     <h2 class="text-center mb-4" style="color: #003366;">Dashboard</h2>
     <div class="row">
-        <!-- Estadísticas Generales -->
         <div class="col-12 col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">
@@ -89,7 +92,6 @@
                 </div>
             </div>
         </div>
-        <!-- Alumnos por Curso -->
         <div class="col-12 col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">
@@ -100,7 +102,7 @@
                         @foreach($courses as $course)
                             <div class="col-12 col-md-6 mb-2">
                                 <ul class="list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center hoverante">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
                                         {{ $course->name }}
                                         @if($course->seccion) - {{ $course->seccion }} @endif
                                         @if($course->jornada) - {{ $course->jornada }} @endif
@@ -116,7 +118,6 @@
         </div>
     </div>
     <div class="row">
-        <!-- Pagos Recogidos -->
         <div class="col-12 col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">
@@ -136,7 +137,6 @@
                 </div>
             </div>
         </div>
-        <!-- Alumnos sin Pago en el Mes Actual -->
         <div class="col-12 col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">
@@ -169,26 +169,40 @@
         </div>
     </div>
     <div class="mt-3 text-center">
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary me-2">Refrescar Dashboard</a>
-        <a href="{{ route('payments.history', 1) }}" class="btn btn-info">Ver Estado de Cuenta</a>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary me-2"><i class="bi bi-arrow-clockwise"></i> Refrescar Dashboard</a>
+        <a href="{{ route('payments.history', 1) }}" class="btn btn-info"><i class="bi bi-file-earmark-text"></i> Ver Estado de Cuenta</a>
     </div>
 </div>
+@endsection
 
-<!-- Inicializar tooltips -->
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-</script>
+@section('scripts')
 <script>
     $(document).ready(function(){
+        // Inicializar tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Inicializar DataTables
         $('#studentsWithoutPaymentTable').DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json" // Traducción al español
             },
-            "pageLength": 10,       // Muestra 10 registros por página
-            "lengthChange": false   // Oculta el selector para cambiar la cantidad de registros
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ],
+        dom: 'Bfrtip', // Habilita los botones de exportación
+        buttons: [
+            {
+                extend: 'pdf',
+                text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                className: 'btn btn-danger btn-export',
+                title: 'Estudiantes Morosos',
+                exportOptions: {
+                    // Ocultar la primera columna (índice 0)
+                    columns: ':not(:first-child)'
+                }
+            }
+        ]
         });
     });
 </script>
