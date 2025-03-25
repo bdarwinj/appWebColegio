@@ -170,7 +170,7 @@
     </div>
     <div class="mt-3 text-center">
         <a href="{{ route('dashboard') }}" class="btn btn-secondary me-2"><i class="bi bi-arrow-clockwise"></i> Refrescar Dashboard</a>
-        <a href="{{ route('payments.history', 1) }}" class="btn btn-info"><i class="bi bi-file-earmark-text"></i> Ver Estado de Cuenta</a>
+        <a href="{{ route('course_fees.status') }}" class="btn btn-info"><i class="bi bi-file-earmark-text"></i> Ver Estado de Cuenta</a>
     </div>
 </div>
 @endsection
