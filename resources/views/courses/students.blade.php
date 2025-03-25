@@ -104,9 +104,14 @@ $(document).ready(function(){
             },
             {
                 extend: 'pdf',
+                orientation: 'landscape', // Define el PDF en formato apaisado
                 text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
                 className: 'btn btn-danger btn-export',
-                title: 'Estudiantes del Curso {{ $course->name }}'
+                title: 'Estudiantes del Curso {{ $course->name }}',
+                exportOptions: {
+                    // Ocultar la primera columna (índice 0)
+                    columns: ':not(:first-child)'
+                }
             }
         ]
     });
