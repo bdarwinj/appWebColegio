@@ -4,6 +4,16 @@
 
 @section('content')
 <style>
+    /* Estilos para botones consolidados */
+    .btn-primary, .btn-secondary, .btn-danger, .btn-success {
+        transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover { background-color: #004080; }
+    .btn-secondary:hover { background-color: #5a6268; }
+    .btn-danger:hover { background-color: #c82333; }
+    .btn-success:hover { background-color: #218838; }
+
+    /* Estilos generales */
     .table thead th {
         background-color: #003366;
         color: white;
@@ -14,31 +24,6 @@
     .modal-content {
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .btn-action {
-        margin-right: 5px;
-    }
-    .alert-success {
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .dataTables_filter {
-        margin-bottom: 5px;
-    }
-    .btn-primary, .btn-secondary, .btn-danger, .btn-success {
-        transition: background-color 0.3s ease;
-    }
-    .btn-primary:hover {
-        background-color: #004080;
-    }
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-    .btn-danger:hover {
-        background-color: #c82333;
-    }
-    .btn-success:hover {
-        background-color: #218838;
     }
     .modal-header {
         background-color: #003366;
@@ -56,13 +41,17 @@
         border-color: #0066CC;
         box-shadow: 0 0 5px rgba(0, 102, 204, 0.5);
     }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
 </style>
 
 <div class="container py-4">
     <h2 class="text-center mb-4" style="color: #003366;">Listado de Estudiantes</h2>
     
-    <div class="mb-3 d-flex justify-content-between align-items-center">
-        @if(Auth::user()->role === 'admin')
+    @if(Auth::user()->role === 'admin')
+        <div class="mb-3 d-flex justify-content-between align-items-center">
             <div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
                     <i class="bi bi-person-plus"></i> Agregar Nuevo Estudiante
@@ -79,8 +68,8 @@
                     <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
                 </a>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
     
     @if(session('success'))
         <div class="alert alert-success d-flex align-items-center mb-4">
@@ -89,7 +78,7 @@
     @endif
     
     <table id="studentsTable" class="table table-bordered table-striped">
-        <thead class="table-dark">
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Identificación</th>
@@ -114,11 +103,11 @@
                 <td>{{ $student->telefono }}</td>
                 <td>{{ $student->active ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-info btn-view-details btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#viewStudentModal">
+                    <button type="button" class="btn btn-sm btn-info btn-view-details" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#viewStudentModal">
                         <i class="bi bi-eye"></i> Ver
                     </button>
                     @if(Auth::user()->role === 'admin')
-                        <button type="button" class="btn btn-sm btn-warning btn-edit-student btn-action" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                        <button type="button" class="btn btn-sm btn-warning btn-edit-student" data-student-id="{{ $student->id }}" data-bs-toggle="modal" data-bs-target="#editStudentModal">
                             <i class="bi bi-pencil"></i> Editar
                         </button>
                     @endif
@@ -290,7 +279,11 @@ $(document).ready(function(){
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
         },
-        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
+        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ],
+            "dom": 'Bfrtip', // Habilitar botones
+            "buttons": [
+                'copy', 'excel', 'pdf', 'print' // Botones para exportar
+            ]
     });
 
     // Evento de doble click para historial de inscripciones
