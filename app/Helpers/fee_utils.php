@@ -36,6 +36,8 @@ if (!function_exists('calculate_student_balance')) {
         $expectedTotal = $fee * $elapsedMonths;
         $totalPaid = \App\Models\Payment::where('student_id', $studentId)
             ->whereYear('payment_date', $academicYear)
+            ->whereNotNull('period')
+            ->where('period', '<>', '')
             ->sum('amount');
         
         $balance = $expectedTotal - $totalPaid;
