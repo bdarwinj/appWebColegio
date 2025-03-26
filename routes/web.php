@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/course-fees/status/ajax', [CourseFeeController::class, 'statusAjax'])->name('course_fees.status.ajax');
     Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('courses.edit');
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('courses.update');
+    Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
 
     
     // Students

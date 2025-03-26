@@ -84,4 +84,22 @@ class CourseController extends Controller
 
         return redirect()->route('courses.index')->with('success', 'Curso actualizado correctamente.');
     }
+    public function destroy($id)
+{
+    $course = Course::findOrFail($id);
+    
+    // Verificar si el curso tiene estudiantes inscritos antes de eliminar
+    if ($course->students()->count() > 0) {
+        return response()->json([
+            'message' => 'No se puede eliminar el curso porque tiene estudiantes inscritos.'
+        ], 400);
+    }
+
+    $course->delete();
+
+    return response()->json([
+        'message' => 'Curso eliminado correctamente.'
+    ], 200);
+}
+
 }

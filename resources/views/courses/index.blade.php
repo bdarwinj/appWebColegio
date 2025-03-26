@@ -63,9 +63,20 @@
                 <td>{{ $course->jornada }}</td>
                 <td>{{ $course->active ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <button type="button" class="btn btn-sm btn-warning btn-edit-course" data-course-id="{{ $course->id }}" data-bs-toggle="modal" data-bs-target="#editCourseModal">
+                    <!-- Botón Editar -->
+                    <button type="button" class="btn btn-sm btn-warning btn-edit-course" 
+                        data-course-id="{{ $course->id }}" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#editCourseModal">
                         <i class="bi bi-pencil"></i> Editar
                     </button>
+
+                    <!-- Botón Eliminar -->
+                    <button type="button" class="btn btn-sm btn-danger btn-delete-course" 
+                        data-course-id="{{ $course->id }}">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                    </form>
                 </td>
             </tr>
             @endforeach
@@ -128,7 +139,7 @@
 @endsection
 
 @section('scripts')
-<!-- DataTables JS CDN -->
+<!-- DataTables -->
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -139,30 +150,45 @@ $(document).ready(function(){
         "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
     });
 
-    // Manejar clic en el botón "Editar"
+    // Manejar la carga del modal de edición
     $('.btn-edit-course').on('click', function(){
         var courseId = $(this).data('course-id');
         var modalContent = $('#editCourseModalContent');
-        modalContent.html(
-          '<div class="modal-header">' +
-            '<h5 class="modal-title" id="editCourseModalLabel">Editar Curso</h5>' +
-            '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>' +
-          '</div>' +
-          '<div class="modal-body text-center">' +
-            '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>' +
-          '</div>'
-        );
+        
+        modalContent.html('<div class="modal-header"><h5 class="modal-title">Editar Curso</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body text-center"><div class="spinner-border text-primary"></div></div>');
+
         $.ajax({
             url: '/courses/' + courseId + '/edit',
             type: 'GET',
             success: function(response) {
                 modalContent.html(response);
             },
-            error: function(xhr, status, error) {
-                modalContent.html('<p class="text-danger">Error al cargar el formulario. Inténtelo nuevamente.</p>');
-                console.error("AJAX error:", status, error);
+            error: function() {
+                modalContent.html('<p class="text-danger">Error al cargar el formulario.</p>');
             }
         });
+    });
+
+    // Manejar la eliminación del curso con confirmación
+    $('.btn-delete-course').on('click', function(){
+        var courseId = $(this).data('course-id');
+        
+        if(confirm("¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.")) {
+            $.ajax({
+                url: '/courses/' + courseId,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    location.reload(); // Recargar la página tras eliminar
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseJSON.message);
+                }
+            });
+        }
     });
 });
 </script>
