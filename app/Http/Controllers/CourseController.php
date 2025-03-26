@@ -54,5 +54,34 @@ class CourseController extends Controller
         $course = Course::with('students')->findOrFail($id);
         return view('courses.students', compact('course'));
     }
-    
+    /**
+     * Retorna el formulario de edición para el curso.
+     */
+    public function edit($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('courses.edit', compact('course'));
+    }
+
+    /**
+     * Actualiza el curso.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'seccion' => 'nullable|string',
+            'jornada' => 'nullable|string',
+            'active' => 'required|boolean'
+        ]);
+
+        // Recoger los datos y forzar que 'jornada' nunca sea null
+        $data = $request->only(['name', 'seccion', 'jornada', 'active']);
+        $data['jornada'] = $data['jornada'] ?? "";
+
+        $course = Course::findOrFail($id);
+        $course->update($data);
+
+        return redirect()->route('courses.index')->with('success', 'Curso actualizado correctamente.');
+    }
 }

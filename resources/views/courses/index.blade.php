@@ -32,25 +32,18 @@
         font-weight: 600;
     }
 </style>
-
 <div class="container py-4">
-    <!-- Título centrado con mejor espaciado -->
-    <h2 class="text-center mb-4">Listado de Cursos</h2>
-
+    <h2 class="text-center mb-4" style="color: #003366;">Listado de Cursos</h2>
+    @if(session('success'))
+        <div class="alert alert-success mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
     <!-- Botón para agregar curso con ícono -->
     <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#addCourseModal">
         <i class="bi bi-plus-circle me-1"></i> Agregar Curso
     </button>
-
-    <!-- Alerta de éxito con ícono -->
-    @if(session('success'))
-        <div class="alert alert-success d-flex align-items-center mb-4">
-            <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
-        </div>
-    @endif
-
-    <!-- Tabla mejorada -->
-    <table class="table table-bordered table-striped shadow-sm">
+    <table id="coursesTable" class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
@@ -58,22 +51,27 @@
                 <th>Sección</th>
                 <th>Jornada</th>
                 <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach($courses as $course)
-            <tr>
+            <tr data-course-id="{{ $course->id }}">
                 <td>{{ $course->id }}</td>
                 <td>{{ $course->name }}</td>
                 <td>{{ $course->seccion }}</td>
                 <td>{{ $course->jornada }}</td>
                 <td>{{ $course->active ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-warning btn-edit-course" data-course-id="{{ $course->id }}" data-bs-toggle="modal" data-bs-target="#editCourseModal">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
-
 <!-- Modal para agregar curso -->
 <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -110,4 +108,62 @@
         </div>
     </div>
 </div>
+<!-- Modal: Editar Curso -->
+<div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="editCourseModalContent">
+      <!-- El contenido se cargará vía AJAX -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCourseModalLabel">Editar Curso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@endsection
+
+@section('scripts')
+<!-- DataTables JS CDN -->
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('#coursesTable').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"
+        },
+        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ]
+    });
+
+    // Manejar clic en el botón "Editar"
+    $('.btn-edit-course').on('click', function(){
+        var courseId = $(this).data('course-id');
+        var modalContent = $('#editCourseModalContent');
+        modalContent.html(
+          '<div class="modal-header">' +
+            '<h5 class="modal-title" id="editCourseModalLabel">Editar Curso</h5>' +
+            '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>' +
+          '</div>' +
+          '<div class="modal-body text-center">' +
+            '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>' +
+          '</div>'
+        );
+        $.ajax({
+            url: '/courses/' + courseId + '/edit',
+            type: 'GET',
+            success: function(response) {
+                modalContent.html(response);
+            },
+            error: function(xhr, status, error) {
+                modalContent.html('<p class="text-danger">Error al cargar el formulario. Inténtelo nuevamente.</p>');
+                console.error("AJAX error:", status, error);
+            }
+        });
+    });
+});
+</script>
 @endsection

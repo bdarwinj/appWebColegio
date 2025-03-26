@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function(){
     Route::post('/course-fees', [CourseFeeController::class, 'store'])->name('course_fees.store');
     Route::get('/course-fees/status', [CourseFeeController::class, 'status'])->name('course_fees.status');
     Route::get('/course-fees/status/ajax', [CourseFeeController::class, 'statusAjax'])->name('course_fees.status.ajax');
+    Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('courses.edit');
+    Route::put('/courses/{id}', [CourseController::class, 'update'])->name('courses.update');
 
     
     // Students
