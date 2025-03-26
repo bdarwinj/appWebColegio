@@ -15,8 +15,12 @@
             <input type="text" name="seccion" id="seccion" class="form-control" value="{{ $course->seccion }}">
         </div>
         <div class="mb-3">
-            <label for="jornada" class="form-label">Jornada</label>
-            <input type="text" name="jornada" id="jornada" class="form-control" value="{{ $course->jornada }}">
+            <label for="jornada" class="form-label">Jornada (opcional)</label>
+            <select class="form-select" id="jornada" name="jornada">
+                <option value="" {{ $course->jornada == '' ? 'selected' : '' }}>-- Seleccionar --</option>
+                <option value="Mañana" {{ $course->jornada == 'Mañana' ? 'selected' : '' }}>Mañana</option>
+                <option value="Tarde" {{ $course->jornada == 'Tarde' ? 'selected' : '' }}>Tarde</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="active" class="form-label">Estado</label>

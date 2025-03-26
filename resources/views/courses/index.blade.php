@@ -39,10 +39,11 @@
             {{ session('success') }}
         </div>
     @endif
+    @if(Auth::user()->role === 'admin')
     <!-- Botón para agregar curso con ícono -->
     <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#addCourseModal">
         <i class="bi bi-plus-circle me-1"></i> Agregar Curso
-    </button>
+    </button>@endif
     <table id="coursesTable" class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
@@ -63,20 +64,21 @@
                 <td>{{ $course->jornada }}</td>
                 <td>{{ $course->active ? 'Activo' : 'Inactivo' }}</td>
                 <td>
-                    <!-- Botón Editar -->
-                    <button type="button" class="btn btn-sm btn-warning btn-edit-course" 
-                        data-course-id="{{ $course->id }}" 
-                        data-bs-toggle="modal" 
-                        data-bs-target="#editCourseModal">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
+                    @if(Auth::user()->role === 'admin')
+                        <!-- Botón Editar -->
+                        <button type="button" class="btn btn-sm btn-warning btn-edit-course" 
+                            data-course-id="{{ $course->id }}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editCourseModal">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
 
-                    <!-- Botón Eliminar -->
-                    <button type="button" class="btn btn-sm btn-danger btn-delete-course" 
-                        data-course-id="{{ $course->id }}">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                    </form>
+                        <!-- Botón Eliminar -->
+                        <button type="button" class="btn btn-sm btn-danger btn-delete-course" 
+                            data-course-id="{{ $course->id }}">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    @endif
                 </td>
             </tr>
             @endforeach
