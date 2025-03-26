@@ -18,23 +18,36 @@ class CourseFeeController extends Controller
         return view('course_fees.config', compact('courseFees', 'courses', 'currentYear'));
     }
     
+    /**
+     * Actualiza o crea la tarifa mensual para todos los cursos que tengan el mismo nombre,
+     * sin importar la sección o jornada.
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'course_id' => 'required|numeric|exists:courses,id',
+            'course_id'     => 'required|numeric|exists:courses,id',
             'academic_year' => 'required|numeric',
-            'fee' => 'required|numeric|min:0'
+            'fee'           => 'required|numeric|min:0'
         ]);
+
+        // Se obtiene el curso seleccionado para configurar la tarifa.
+        $course = Course::findOrFail($request->course_id);
+
+        // Se buscan todos los cursos con el mismo nombre, ignorando sección y jornada.
+        $coursesWithSameName = Course::where('name', $course->name)->get();
+
+        // Se actualiza o crea el registro de tarifa para cada uno de los cursos encontrados.
+        foreach ($coursesWithSameName as $courseItem) {
+            CourseFee::updateOrCreate(
+                [
+                    'course_id'     => $courseItem->id,
+                    'academic_year' => $request->academic_year
+                ],
+                ['fee' => $request->fee]
+            );
+        }
         
-        CourseFee::updateOrCreate(
-            [
-                'course_id' => $request->course_id,
-                'academic_year' => $request->academic_year
-            ],
-            ['fee' => $request->fee]
-        );
-        
-        return redirect()->route('course_fees.config')->with('success', 'Tarifa actualizada correctamente.');
+        return redirect()->route('course_fees.config')->with('success', 'Tarifa actualizada correctamente para todos los cursos con el mismo nombre.');
     }
     
     /**
