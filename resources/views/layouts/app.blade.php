@@ -85,9 +85,6 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <!-- Menú de navegación con iconos -->
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('dashboard') }}"><i class="bi bi-house-door"></i> Dashboard</a>
-        </li>
         <!-- Cursos -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="coursesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
