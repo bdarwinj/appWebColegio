@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ibb.co/vCJYT469" alt="Sistema de Pagos Escolar" />
+  ![image](https://github.com/user-attachments/assets/eed77978-54ab-4f1e-901a-10000d0da470)
 </p>
 
 <h1 align="center">Sistema Escolar - Laravel</h1>
