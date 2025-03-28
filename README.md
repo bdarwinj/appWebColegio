@@ -1,7 +1,4 @@
-<p align="center">
-  ![image](https://github.com/user-attachments/assets/eed77978-54ab-4f1e-901a-10000d0da470)
-</p>
-
+<p align="center"><a href="https://appcolegio.com.co/" target="_blank"><img src="https://github.com/user-attachments/assets/eed77978-54ab-4f1e-901a-10000d0da470" width="400" alt="Sistema Escolar Logo"></a></p>
 <h1 align="center">Sistema Escolar - Laravel</h1>
 
 Este proyecto es una aplicación de gestión escolar desarrollada con Laravel y MySQL. El sistema permite administrar estudiantes, cursos, inscripciones, pagos, mensualidades, usuarios y configuraciones generales del colegio. Además, se incluyen funcionalidades de exportación a PDF y Excel, backup y restauración de la base de datos, y un completo sistema de autenticación y gestión de usuarios.
