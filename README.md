@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.ibb.co/vCJYT469/logo.png" alt="Logo del Colegio" />
+  <img src="https://ibb.co/vCJYT469" alt="Sistema de Pagos Escolar" />
 </p>
 
 <h1 align="center">Sistema Escolar - Laravel</h1>
