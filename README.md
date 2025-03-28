@@ -1,54 +1,54 @@
-# Sistema de Gestión de Pagos para Colegios
+# Sistema Escolar - Laravel
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Este proyecto es una aplicación de gestión escolar desarrollada con Laravel y MySQL. El sistema permite administrar estudiantes, cursos, inscripciones, pagos, mensualidades, usuarios y configuraciones generales del colegio. Además, se incluyen funcionalidades de exportación a PDF y Excel, backup y restauración de la base de datos, y un completo sistema de autenticación y gestión de usuarios.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Características
 
-Este proyecto, desarrollado por **Darwin Bolivar**, es un sistema de gestión de pagos creado específicamente para colegios. Utilizando el framework **Laravel**, ofrece una solución eficiente y escalable para administrar los pagos de los estudiantes de manera centralizada.
+- **Gestión de Estudiantes:**  
+  - Registro, actualización e importación masiva (desde Excel).
+  - Visualización detallada del historial de pagos.
+  - Búsqueda y filtrado mediante DataTables.
 
----
+- **Gestión de Cursos:**  
+  - Administración de cursos con secciones y jornadas.
+  - Edición y eliminación de cursos mediante ventanas modales.
+  - Exportación de estudiantes por curso a PDF y Excel (hojas separadas por curso).
 
-## Acerca del Proyecto
+- **Inscripciones y Promoción:**  
+  - Registro de inscripciones y promoción automática de estudiantes entre cursos.
+  - Seguimiento del estado de inscripciones.
 
-Este sistema permite a los colegios gestionar los pagos de sus estudiantes de forma sencilla y organizada. Construido con Laravel, un framework de aplicaciones web con una sintaxis expresiva y elegante, el proyecto aprovecha herramientas como:
+- **Pagos y Mensualidades:**  
+  - Registro de pagos, con opción de seleccionar el periodo (mes) mediante nombres (Enero, Febrero, etc.) o dejarlo opcional.
+  - Generación de recibos en PDF en orientación horizontal.
+  - Cálculo del balance de mensualidades (considerando los meses transcurridos) y detección de mensualidades pendientes.
+  - Visualización del estado de cuenta de mensualidades por estudiante y global mediante DataTables con carga asíncrona.
 
-- [Enrutamiento simple y rápido](https://laravel.com/docs/routing)
-- [Inyección de dependencias poderosa](https://laravel.com/docs/container)
-- [ORM intuitivo para bases de datos](https://laravel.com/docs/eloquent)
-- [Migraciones de esquemas agnósticas a la base de datos](https://laravel.com/docs/migrations)
+- **Gestión de Usuarios y Contraseñas:**  
+  - Autenticación nativa con Laravel.
+  - Cambio de contraseña personal y, para administradores, cambio de contraseña de otros usuarios.
+  - El administrador puede eliminar usuarios desde el listado.
 
-El objetivo es proporcionar una herramienta accesible y robusta para la administración de pagos en el ámbito educativo.
+- **Backup y Restauración de la Base de Datos:**  
+  - Funcionalidad para generar respaldos de la base de datos mediante mysqldump (usando Symfony Process para seguridad).
+  - Restauración de la base de datos a partir de un archivo SQL.
 
----
-
-## Características Principales
-
-- Registro y gestión de estudiantes
-- Administración de cursos y secciones
-- Registro de pagos y generación de recibos
-- Reportes de pagos pendientes y realizados
-- Interfaz de usuario intuitiva
-
----
+- **Frontend Moderno:**  
+  - Utiliza Bootstrap (CDN) para el diseño responsivo.
+  - Select2 para campos de selección con búsqueda.
+  - DataTables para una experiencia interactiva en tablas.
 
 ## Requisitos
 
-- PHP >= 8.0
-- Composer
-- MySQL (o cualquier base de datos compatible con Laravel)
-- Node.js y NPM (para la compilación de assets)
-
----
+- PHP ^8.1  
+- Laravel Framework 10.x  
+- MySQL  
+- Composer  
+- Node.js y npm (para compilar assets, si se utiliza Laravel Mix)
 
 ## Instalación
 
-Sigue estos pasos para instalar el proyecto en tu máquina local:
-
-1. Clona el repositorio:
+1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
+   git clone <URL-del-repositorio>
+   cd school-system
