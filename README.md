@@ -50,5 +50,50 @@ Este proyecto es una aplicación de gestión escolar desarrollada con Laravel y 
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone <URL-del-repositorio>
+   git clone [Repositorio](https://github.com/bdarwinj/appWebColegio.git)
    cd school-system
+   ```
+2. **Instalar dependencias:**
+   ```bash
+   composer install
+   npm install
+   npm run dev
+   ```
+3. **Configuración del entorno:**
+   - Copiar el archivo `.env.example` a `.env`  
+   - Configurar los parámetros de la base de datos y otros parámetros necesarios.
+4. **Ejecutar migraciones y seeds:**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+## Uso
+
+**Acceso:**  
+Inicia la aplicación en tu servidor local o en producción y accede a través de la URL configurada (por ejemplo, http://localhost).
+
+**Dashboard:**  
+El dashboard muestra un resumen general con estadísticas, información de cursos y alumnos por curso. Desde aquí, puedes acceder a las secciones de estudiantes, cursos, inscripciones, pagos, mensualidades y más.
+
+**Gestión de Estudiantes y Cursos:**  
+Desde el menú principal, puedes acceder a la lista de estudiantes y cursos. Los administradores tienen acceso a opciones de edición y eliminación a través de modales y botones.
+
+**Pagos y Mensualidades:**  
+- En la sección de pagos, se registra el pago con un campo de selección para el período en el que se muestra el nombre de los meses y se puede dejar opcional.  
+- La sección de mensualidades permite configurar la tarifa de un curso y actualizarla automáticamente para todos los cursos con el mismo nombre (independientemente de la sección o jornada).  
+- Se puede consultar el estado de cuenta de mensualidades, mostrando los estudiantes en mora, el total adeudado y el número de mensualidades pendientes.
+
+**Exportación:**  
+Se pueden exportar los datos de estudiantes a PDF (en orientación apaisada) y a Excel (con hojas separadas por curso y una hoja final con todos los estudiantes).
+
+**Gestión de Usuarios:**  
+Los administradores pueden cambiar contraseñas (propias y de otros usuarios) y eliminar usuarios.
+
+**Backup y Restauración:**  
+En la sección de configuración, los administradores pueden generar respaldos de la base de datos y restaurarlos desde un archivo SQL.
+
+## Licencia
+
+El uso, copia, modificación o distribución de este software requiere autorización previa y expresa del titular de los derechos. Queda prohibido utilizar el código de la aplicación sin permiso. Cualquier uso no autorizado será considerado una violación de los derechos de autor y estará sujeto a sanciones legales, incluyendo la obligación de indemnizar al titular de los derechos por los daños y perjuicios ocasionados.
+
+Para solicitar autorización, contáctame a través de [bdarwinj@gmail.com].
