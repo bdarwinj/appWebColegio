@@ -7,6 +7,8 @@ use App\Models\CourseFee;
 use App\Models\Course;
 use App\Models\Student;
 use Carbon\Carbon;
+use App\Mail\MonthlyDebtNotification;
+use Illuminate\Support\Facades\Mail;
 
 class CourseFeeController extends Controller
 {
@@ -30,7 +32,7 @@ class CourseFeeController extends Controller
             'fee'           => 'required|numeric|min:0'
         ]);
 
-        // Se obtiene el curso seleccionado para configurar la tarifa.
+        // Obtener el curso seleccionado y actualizar todos los cursos con el mismo nombre
         $course = Course::findOrFail($request->course_id);
 
         // Se buscan todos los cursos con el mismo nombre, ignorando sección y jornada.
@@ -56,6 +58,7 @@ class CourseFeeController extends Controller
     public function status(Request $request)
     {
         $academicYear = $request->input('academic_year', date('Y'));
+        // Aquí se calcula el resumen global, pero la tabla se cargará via AJAX
         $students = Student::with('course')->get();
         $globalBalance = 0;
         $globalPendingMonths = 0;
@@ -99,5 +102,23 @@ class CourseFeeController extends Controller
             }
         }
         return response()->json(['data' => $data]);
+    }
+    
+    /**
+     * Envía notificaciones por email a los estudiantes que tienen deuda en mensualidades.
+     */
+    public function sendNotifications(Request $request)
+    {
+        $academicYear = $request->input('academic_year', date('Y'));
+        $students = Student::with('course')->get();
+        $sentCount = 0;
+        foreach ($students as $student) {
+            $balanceData = calculate_student_balance($student->id, $academicYear);
+            if ($balanceData && $balanceData['balance'] > 0 && !empty($student->email)) {
+                Mail::to($student->email)->send(new MonthlyDebtNotification($student, $balanceData, $academicYear));
+                $sentCount++;
+            }
+        }
+        return response()->json(['message' => "Notificaciones enviadas a $sentCount estudiantes."], 200);
     }
 }

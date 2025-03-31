@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('courses.edit');
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('courses.update');
     Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    Route::get('/course-fees/send-notifications', [CourseFeeController::class, 'sendNotifications'])->name('course_fees.send_notifications');
 
     
     // Students
